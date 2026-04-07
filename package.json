@@ -2,10 +2,10 @@
   "name": "tp3",
   "version": "1.0.2",
   "description": "TP pour le cours INF8808.",
-  "main": "src/index.js",
+  "main": "src/scatterplot-main.js",
   "scripts": {
-    "build": "parcel build ./src/index.html",
-    "start": "parcel ./src/index.html --log-level=2 --port=8080",
+    "build": "parcel build ./src/scatterplot.html",
+    "start": "parcel ./src/scatterplot.html --log-level=2 --port=8080",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Olivia Gélinas",

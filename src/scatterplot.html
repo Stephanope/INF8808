@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies Scatterplot | INF8808</title>
+
+    <link rel="stylesheet" href="assets/typography.css">
+    <link rel="stylesheet" href="assets/scatterplot.css">
+  </head>
+
+  <body class="scatterplot-page">
+    <main class="dashboard-shell">
+      <section class="chart-panel">
+        <div class="chart-toolbar">
+          <span>Couleur des points :</span>
+          <div class="metric-buttons">
+            <button class="metric-btn" data-metric="runtime">Duree</button>
+            <button class="metric-btn active" data-metric="vote_average">Note</button>
+          </div>
+        </div>
+
+        <div id="scatterplot"></div>
+        <div class="chart-tooltip" id="chart-tooltip"></div>
+      </section>
+
+      <aside class="side-panel">
+        <h1 class="movie-title" id="movie-title">AVENGERS : ENDGAME</h1>
+        <div class="poster-wrap">
+          <img id="movie-poster" alt="Affiche du film">
+        </div>
+
+        <div class="meta-list">
+          <div class="meta-row">Budget : <span id="meta-budget">-</span></div>
+          <div class="meta-row">Revenus : <span id="meta-revenue">-</span></div>
+          <div class="meta-row">Note critique : <span id="meta-rating">-</span></div>
+          <div class="meta-row">Duree (min) : <span id="meta-runtime">-</span></div>
+          <div class="meta-genres">Genre(s) : <span id="meta-genres">-</span></div>
+        </div>
+      </aside>
+    </main>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script type="module" src="scripts/scatterplot-main.js"></script>
+  </body>
+</html>

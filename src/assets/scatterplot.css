@@ -1,0 +1,205 @@
+:root {
+  --bg-main: #06080d;
+  --bg-panel: #10060a;
+  --bg-panel-2: #18090d;
+  --text-main: #f6f6f6;
+  --text-muted: #bcbcc0;
+  --line-soft: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.2);
+  --accent-blue: #1ba7ff;
+  --accent-red: #ff334f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.scatterplot-page {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text-main);
+  font-family: 'Roboto', sans-serif;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(48, 130, 255, 0.18), transparent 36%),
+    radial-gradient(circle at 85% 0%, rgba(255, 39, 39, 0.15), transparent 34%),
+    linear-gradient(140deg, #05070b 0%, #0a0d13 45%, #0e090f 100%);
+}
+
+.dashboard-shell {
+  width: min(1360px, 100%);
+  margin: 0 auto;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 0;
+  min-height: 100vh;
+}
+
+.chart-panel {
+  border: 2px solid var(--accent-blue);
+  border-right: 0;
+  background: linear-gradient(155deg, rgba(6, 9, 14, 0.95), rgba(12, 15, 24, 0.9));
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.13;
+  pointer-events: none;
+}
+
+.chart-toolbar {
+  position: absolute;
+  right: 18px;
+  top: 12px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #f2f2f2;
+}
+
+.metric-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.metric-btn {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(90, 10, 10, 0.35);
+  color: #e4e4e4;
+  min-width: 96px;
+  padding: 6px 14px;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+}
+
+.metric-btn:hover {
+  border-color: rgba(255, 255, 255, 0.38);
+}
+
+.metric-btn.active {
+  background: linear-gradient(90deg, #5f3a36, #6f3133);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #fff;
+}
+
+#scatterplot {
+  width: 100%;
+  height: 100%;
+  min-height: 650px;
+}
+
+.side-panel {
+  border: 2px solid #a80000;
+  background: radial-gradient(circle at 20% 0%, #2a0910 0%, var(--bg-panel) 54%, #070609 100%);
+  padding: 6px 14px 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-title {
+  margin: 0 0 8px;
+  font-family: 'Roboto Slab', serif;
+  font-size: 34px;
+  letter-spacing: 0.6px;
+  line-height: 1.05;
+  text-transform: uppercase;
+  font-style: italic;
+  color: #fff;
+}
+
+.poster-wrap {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(160deg, #161015, #090a0d);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.poster-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.meta-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.meta-row {
+  color: #d6d6d8;
+  font-size: 22px;
+  line-height: 1.2;
+  font-family: 'Roboto Slab', serif;
+}
+
+.meta-row span {
+  color: #ffffff;
+}
+
+.meta-genres {
+  margin-top: 4px;
+  color: #dcdce2;
+  font-size: 24px;
+  line-height: 1.18;
+  font-family: 'Roboto Slab', serif;
+}
+
+.chart-tooltip {
+  position: absolute;
+  transform: translate(-50%, -110%);
+  z-index: 7;
+  pointer-events: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(236, 236, 236, 0.92);
+  color: #222;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.chart-tooltip.visible {
+  opacity: 1;
+}
+
+@media (max-width: 1100px) {
+  .dashboard-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-panel {
+    border-right: 2px solid var(--accent-blue);
+  }
+
+  .side-panel {
+    min-height: 360px;
+  }
+
+  .movie-title {
+    font-size: 28px;
+  }
+
+  .meta-row,
+  .meta-genres {
+    font-size: 20px;
+  }
+}

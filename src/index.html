@@ -3,29 +3,75 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="Description" content="Code pour le TP3 de INF8808.">
-        <title>TP3 | INF8808</title>
-
+        <meta name="Description" content="Le site du projet INF8808 sur le theme du cinema.">
+        <title>INF8808flix</title>
         <link rel="stylesheet" href="assets/style.css">
         <link rel="stylesheet" href="assets/typography.css">
-
+        
       </head>
 
       <body>
         <header>
-          <h1>
-            Trees planted in Montreal neighborhoods
-          </h1>
-          <h2>
-            From 2010 to 2020
-          </h2>
+          <button class="menu-trigger" type="button" aria-label="Ouvrir le menu" onclick="openNav()">&#9776;</button>
+          <div class="logo"> INF8808-flix</div>
+          <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="#part-1" onclick="closeNav()">Partie 1 - Scatterplot</a>
+            <a href="#part-2" onclick="closeNav()">Partie 2 - Dataviz 2</a>
+            <a href="#part-3" onclick="closeNav()">Partie 3 - Dataviz 3</a>
+            <a href="#part-4" onclick="closeNav()">Partie 4 - Dataviz 4</a>
+            <a href="#part-5" onclick="closeNav()">Partie 5 - Dataviz 5</a>
+          </div>
+          <script>
+            function openNav() {
+              document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+              document.getElementById("mySidenav").style.width = "0";
+            }
+          </script>
         </header>
         <main>
-          <div class="viz-container">
-            <div class="graph" id="heatmap">
-              <svg class="heatmap-svg"></svg>
-            </div>
-          </div>
+          <section class="landing-hero" id="intro">
+            <p class="hero-kicker">INF8808 - Projet Cinema</p>
+            <h1 class="hero-title">Explorer les films par les donnees</h1>
+            <p class="hero-description">
+              Cette plateforme presente nos visualisations interactives pour comprendre les tendances du cinema:
+              notes, revenus, budgets et plus encore... yapyap
+            </p>
+            <a class="hero-cta" href="#part-1">Commencer</a>
+          </section>
+
+          <section class="story-part" id="part-1">
+            <p class="part-index">Partie 1</p>
+            <h2>Movie Scatterplot</h2>
+            <p>:3</p>
+          </section>
+
+          <section class="story-part" id="part-2">
+            <p class="part-index">Partie 2</p>
+            <h2>Dataviz 2</h2>
+            <p>:P</p>
+          </section>
+
+          <section class="story-part" id="part-3">
+            <p class="part-index">Partie 3</p>
+            <h2>Dataviz 3</h2>
+            <p>hm.</p>
+          </section>
+
+          <section class="story-part" id="part-4">
+            <p class="part-index">Partie 4</p>
+            <h2>Dataviz 4</h2>
+            <p>">.<</p>
+          </section>
+
+          <section class="story-part" id="part-5">
+            <p class="part-index">Partie 5</p>
+            <h2>Dataviz 5</h2>
+            <p>blabla.</p>
+          </section>
         </main>
         <script src="https://d3js.org/d3.v7.js"></script>
         <script type="module" src="index.js"></script>

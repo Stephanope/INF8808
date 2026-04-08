@@ -16,7 +16,7 @@
 
 body.scatterplot-page {
   margin: 0;
-  min-height: 100vh;
+  min-height: 80vh;
   color: var(--text-main);
   font-family: 'Roboto', sans-serif;
   background:
@@ -26,13 +26,13 @@ body.scatterplot-page {
 }
 
 .dashboard-shell {
-  width: min(1360px, 100%);
+  width: calc(90vw - 20px);
   margin: 0 auto;
   padding: 10px;
   display: grid;
-  grid-template-columns: 1fr 280px;
+  grid-template-columns: minmax(0, 1fr) 420px;
   gap: 0;
-  min-height: 100vh;
+  min-height: 650px;
 }
 
 .chart-panel {
@@ -41,6 +41,8 @@ body.scatterplot-page {
   background: linear-gradient(155deg, rgba(6, 9, 14, 0.95), rgba(12, 15, 24, 0.9));
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .chart-panel::before {
@@ -95,8 +97,17 @@ body.scatterplot-page {
 
 #scatterplot {
   width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
+  z-index: 1;
+  padding-right: 30px;
+}
+
+#scatterplot svg {
+  width: 100%;
   height: 100%;
-  min-height: 650px;
+  display: block;
 }
 
 .side-panel {

@@ -1,7 +1,13 @@
+import * as d3 from 'd3'
 import { formatMoney } from './scatterplot-data.js'
 
 const imageBase = 'https://image.tmdb.org/t/p/w500'
 
+/**
+ * Initializes the movie detail panel.
+ *
+ * @returns {object} The panel selections.
+ */
 export function initMoviePanel () {
   return {
     title: d3.select('#movie-title'),
@@ -14,6 +20,12 @@ export function initMoviePanel () {
   }
 }
 
+/**
+ * Updates the movie detail panel.
+ *
+ * @param {object} panel The panel selections.
+ * @param {object} movie The selected movie.
+ */
 export function updateMoviePanel (panel, movie) {
   panel.title.text((movie.title || 'Film').toUpperCase())
 
@@ -27,9 +39,9 @@ export function updateMoviePanel (panel, movie) {
       .attr('alt', 'Aucune affiche disponible')
   }
 
-  panel.budget.text(`${formatMoney(movie.budget)}`)
-  panel.revenue.text(`${formatMoney(movie.revenue)}`)
-  panel.rating.text(`${movie.vote_average.toFixed(3)}`)
-  panel.runtime.text(`${Math.round(movie.runtime)}`)
+  panel.budget.text(formatMoney(movie.budget))
+  panel.revenue.text(formatMoney(movie.revenue))
+  panel.rating.text(movie.vote_average.toFixed(3))
+  panel.runtime.text(Math.round(movie.runtime))
   panel.genres.text(movie.genres || 'N/A')
 }

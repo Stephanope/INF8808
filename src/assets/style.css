@@ -84,7 +84,7 @@ header {
 }
 
 main {
-  width: min(1080px, 100% - 32px);
+  width: min(1400px, 100% - 32px);
   margin: 28px auto 40px;
   display: grid;
   gap: 24px;
@@ -173,7 +173,7 @@ main {
 .scatterplot-embed {
   margin-top: 14px;
   width: 100%;
-  min-height: 760px;
+  min-height: 900px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: #120f0d;
@@ -207,7 +207,7 @@ main {
   border: 1px solid var(--line);
   border-radius: 12px;
   overflow: hidden;
-  min-height: 560px;
+  min-height: 700px;
   background:
     radial-gradient(circle at 75% 20%, #f8efe2 0%, transparent 48%),
     linear-gradient(180deg, #fbf6ec 0%, #f4ebe0 100%);

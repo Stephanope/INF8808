@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Heatmap Component</title>
+    <style>
+        body { background-color: #2b2b2b; color: #fff; font-family: 'Roboto', sans-serif; }
+        .tooltip { position: absolute; text-align: center; padding: 6px; font-size: 12px; background: rgba(0, 0, 0, 0.7); color: #fff; border-radius: 4px; pointer-events: none; }
+        .cell { stroke: #1a1a1a; stroke-width: 2px; }
+        .cell:hover { stroke: white; stroke-width: 3px; cursor: pointer; }
+    </style>
+</head>
+<body> 
+    <div id="heatmap-container">
+        <div id="heatmap-revenue"></div>
+        <div id="heatmap-vote"></div>
+    </div>
+    <script type="module" src="index.js"></script>
+</body>
+</html>

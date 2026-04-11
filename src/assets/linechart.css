@@ -1,0 +1,128 @@
+/* Line Chart Styles */
+
+.linechart-page {
+  background-color: #0d1117;
+  color: #e0e0e0;
+}
+
+.dashboard-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: #0d1117;
+}
+
+.linechart-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  height: fit-content;
+}
+
+.chart-section {
+  background-color: #1a1f26;
+  border: none;
+  border-radius: 0;
+  padding: 1rem;
+  margin-bottom: 0;
+  height: fit-content;
+}
+
+.chart-title {
+  font-size: 1rem;
+  margin: 0 0 0.75rem 0;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.line-chart-svg {
+  width: 100%;
+  
+}
+
+.line-path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.legend {
+  font-size: 12px;
+}
+
+.legend-text {
+  fill: #8b949e;
+  font-size: 12px;
+}
+
+.chart-dot {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chart-dot:hover {
+  filter: brightness(1.2);
+}
+
+.axis {
+  font-size: 0.85rem;
+}
+
+.axis text {
+  fill: #8b949e;
+}
+
+.axis line,
+.axis path {
+  stroke: #30363d;
+}
+
+.grid {
+  stroke: #30363d;
+  stroke-dasharray: 4;
+}
+
+.axis-label {
+  font-size: 0.9rem;
+  fill: #8b949e;
+  font-weight: 500;
+}
+
+.linechart-tooltip {
+  position: fixed;
+  background-color: #161b22;
+  color: #ffffff;
+  padding: 0.75rem;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  pointer-events: none;
+  display: none;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .dashboard-shell {
+    padding: 1rem;
+  }
+
+  .chart-panel {
+    padding: 1rem;
+  }
+
+  .chart-panel h1 {
+    font-size: 1.5rem;
+  }
+
+  .chart-section {
+    padding: 1rem;
+  }
+
+  .chart-title {
+    font-size: 1.1rem;
+  }
+
+  .axis {
+    font-size: 0.75rem;
+  }
+}

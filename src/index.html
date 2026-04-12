@@ -11,6 +11,7 @@
     <link rel="icon" type="image/svg+xml" href="assets/logo-inf8808flix.svg" />
     <link rel="stylesheet" href="assets/style.css" />
     <link rel="stylesheet" href="assets/typography.css" />
+    <link rel="stylesheet" href="assets/boxplot.css" />
   </head>
 
   <body>
@@ -112,8 +113,28 @@
 
       <section class="story-part" id="part-5">
         <p class="part-index">Partie 5</p>
-        <h2>Dataviz 5</h2>
-        <p>blabla.</p>
+        <h2>Distribution par genre</h2>
+        <p>Boites a moustaches des revenus et des notes selon le genre cinematographique.</p>
+        <div class="bp-toolbar" id="boxplot-toolbar">
+          <div class="bp-toggle-group">
+            <span class="bp-toolbar-label">Filtrer par :</span>
+            <button class="bp-toggle active" data-metric="revenue">Revenus</button>
+            <button class="bp-toggle" data-metric="vote">Notes</button>
+          </div>
+          <div class="bp-slider-group">
+            <span class="bp-toolbar-label">Periode :</span>
+            <span class="bp-year-label" id="bp-year-min">-</span>
+            <div class="bp-range-wrap">
+              <input class="bp-slider" id="bp-slider-min" type="range" step="1" />
+              <input class="bp-slider" id="bp-slider-max" type="range" step="1" />
+            </div>
+            <span class="bp-year-label" id="bp-year-max">-</span>
+          </div>
+        </div>
+        <div class="boxplot-wrap" id="boxplot-container">
+          <svg id="boxplot-svg"></svg>
+          <div class="bp-tooltip" id="boxplot-tooltip"></div>
+        </div>
       </section>
     </main>
     <script src="https://d3js.org/d3.v7.js"></script>

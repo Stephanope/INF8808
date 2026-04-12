@@ -179,6 +179,16 @@ main {
   background: #120f0d;
 }
 
+.linechart-embed {
+  margin-top: 14px;
+  width: 100%;
+  height: 600px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #120f0d;
+  transition: height 0.3s ease;
+}
+
 .dorling-toolbar {
   margin-top: 14px;
   display: flex;

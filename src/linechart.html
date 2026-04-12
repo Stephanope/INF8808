@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies Line Chart | INF8808</title>
+
+    <link rel="stylesheet" href="assets/typography.css">
+    <link rel="stylesheet" href="assets/linechart.css">
+  </head>
+
+  <body class="linechart-page">
+    <main class="dashboard-shell">
+      <div id="linechart-container" class="linechart-container"></div>
+      <div class="linechart-tooltip" id="linechart-tooltip"></div>
+    </main>
+
+    <script type="module" src="scripts/linechart-main.js"></script>
+    <script>
+      // Communicate iframe height to parent
+      function updateIframeHeight() {
+        const height = document.querySelector('.dashboard-shell').offsetHeight
+        window.parent.postMessage({
+          type: 'iframe-height',
+          height: height
+        }, '*')
+      }
+
+      // Use ResizeObserver to watch for content changes
+      const observer = new ResizeObserver(() => {
+        updateIframeHeight()
+      })
+
+      observer.observe(document.querySelector('.linechart-container'))
+
+      // Initial height update
+      setTimeout(() => {
+        updateIframeHeight()
+      }, 500)
+    </script>

@@ -37,7 +37,7 @@
           >&times;</a
         >
         <a href="#part-1" onclick="closeNav()">Partie 1 - Scatterplot</a>
-        <a href="#part-2" onclick="closeNav()">Partie 2 - Dataviz 2</a>
+        <a href="#part-2" onclick="closeNav()">Partie 2 - Multi-line Chart</a>
         <a href="#part-3" onclick="closeNav()">Partie 3 - Dataviz 3</a>
         <a href="#part-4" onclick="closeNav()">Partie 4 - Dorling map</a>
         <a href="#part-5" onclick="closeNav()">Partie 5 - Dataviz 5</a>
@@ -79,8 +79,15 @@
 
       <section class="story-part" id="part-2">
         <p class="part-index">Partie 2</p>
-        <h2>Dataviz 2</h2>
-        <p>:P</p>
+        <h2>Analyse temporelle des films</h2>
+        <p>
+          Évolution du nombre de films, du budget moyen et des revenus moyens par année.
+        </p>
+        <iframe
+          class="linechart-embed"
+          src="linechart.html"
+          title="Graphiques d'analyse temporelle"
+        ></iframe>
       </section>
 
       <section class="story-part" id="part-3">
@@ -139,5 +146,16 @@
     </main>
     <script src="https://d3js.org/d3.v7.js"></script>
     <script type="module" src="index.js"></script>
+    <script>
+      // Listen for iframe height messages
+      window.addEventListener('message', (event) => {
+        if (event.data.type === 'iframe-height') {
+          const iframes = document.querySelectorAll('.linechart-embed')
+          iframes.forEach(iframe => {
+            iframe.style.height = (event.data.height + 20) + 'px'
+          })
+        }
+      })
+    </script>
   </body>
 </html>

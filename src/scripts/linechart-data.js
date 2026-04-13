@@ -21,7 +21,6 @@ export function loadYearlyData () {
     const afterBudget = afterDate.filter(d => Number.isFinite(d.budget) && d.budget > 0)
     const validMovies = afterBudget.filter(d => Number.isFinite(d.revenue) && d.revenue > 0)
 
-    // Extract year from release_date and group by 5-year periods
     const yearData = d3.rollup(
       validMovies,
       group => ({
@@ -31,10 +30,9 @@ export function loadYearlyData () {
         totalBudget: d3.sum(group, d => d.budget),
         totalRevenue: d3.sum(group, d => d.revenue)
       }),
-      d => Math.floor(d.release_date.getFullYear() / 5) * 5
+      d => Math.ceil(d.release_date.getFullYear() / 5) * 5
     )
 
-    // Convert to array and sort by year
     return Array.from(yearData, ([year, data]) => ({
       year,
       ...data
@@ -127,7 +125,7 @@ export function loadCountryData () {
           avgBudget: d3.mean(group, d => d.budget),
           avgRevenue: d3.mean(group, d => d.revenue)
         }),
-        d => Math.floor(d.release_date.getFullYear() / 5) * 5
+        d => Math.ceil(d.release_date.getFullYear() / 5) * 5
       )
 
       countryData[country] = Array.from(yearData, ([period, data]) => ({

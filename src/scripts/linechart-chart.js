@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
 import { formatMoney, formatCount } from './linechart-data.js'
+import { COLORS, CHART_COLORS, translateCountryName } from './util.js'
 
 /**
  * Creates the multi-line chart visualization.
@@ -21,7 +22,7 @@ export function createLineCharts (selector, data) {
     {
       title: 'Nombre de films',
       key: 'count',
-      color: '#1f77b4',
+      color: CHART_COLORS.colors[0],
       yLabel: 'Nombre',
       formatter: formatCount,
       selector: container.append('div').attr('class', 'chart-section')
@@ -29,7 +30,7 @@ export function createLineCharts (selector, data) {
     {
       title: 'Budget moyen',
       key: 'avgBudget',
-      color: '#ff7f0e',
+      color: CHART_COLORS.colors[1],
       yLabel: 'Budget ($)',
       formatter: formatMoney,
       selector: container.append('div').attr('class', 'chart-section')
@@ -37,7 +38,7 @@ export function createLineCharts (selector, data) {
     {
       title: 'Revenus moyens',
       key: 'avgRevenue',
-      color: '#2ca02c',
+      color: CHART_COLORS.colors[2],
       yLabel: 'Revenus ($)',
       formatter: formatMoney,
       selector: container.append('div').attr('class', 'chart-section')
@@ -75,10 +76,10 @@ export function createCountryLineCharts (selector, data) {
   const width = window.innerWidth - 100
   const height = 220
 
-  // Color scale for countries
+  // Color scale for countries (colorblind-friendly palette)
   const colorScale = d3.scaleOrdinal()
     .domain(topCountries)
-    .range(['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'])
+    .range(CHART_COLORS.colors)
 
   // Create legend container at top right
   const legendContainer = container.append('div')
@@ -86,8 +87,8 @@ export function createCountryLineCharts (selector, data) {
     .style('position', 'absolute')
     .style('top', '0')
     .style('right', '0')
-    .style('background-color', '#161b22')
-    .style('border', '1px solid #30363d')
+    .style('background-color', COLORS.SECONDARY_BG)
+    .style('border', `1px solid ${COLORS.BORDER}`)
     .style('border-radius', '4px')
     .style('padding', '10px')
     .style('z-index', '100')
@@ -105,9 +106,9 @@ export function createCountryLineCharts (selector, data) {
       .style('margin-right', '8px')
 
     legendItem.append('span')
-      .style('color', '#8b949e')
+      .style('color', COLORS.TEXT_SECONDARY)
       .style('font-size', '12px')
-      .text(country)
+      .text(translateCountryName(country))
   })
 
   // Define three metrics
@@ -115,7 +116,7 @@ export function createCountryLineCharts (selector, data) {
     {
       title: 'Nombre de films',
       key: 'count',
-      yLabel: 'Nombre',
+      yLabel: 'Nombre de films',
       formatter: formatCount
     },
     {
@@ -233,17 +234,32 @@ function drawCountryLineChart (container, countryData, countries, metric, colorS
           .attr('r', 5)
           .attr('opacity', 1)
 
+        // Make other lines translucent
+        g.selectAll('.line-path')
+          .style('opacity', function () {
+            // Get the stroke color of this line
+            const lineColor = d3.select(this).attr('stroke')
+            // Compare with the hovered country's color
+            return lineColor === colorScale(country) ? 1 : 0.15
+          })
+
         const tooltip = d3.select('.linechart-tooltip')
         tooltip
           .style('display', 'block')
           .style('left', event.pageX + 10 + 'px')
           .style('top', event.pageY + 10 + 'px')
-          .html(`<strong>${country}</strong><br/>Période: ${d.year}-${d.year + 4}<br/>${metric.title}: ${metric.formatter(d[metric.key])}`)
+          .style('background-color', COLORS.SECONDARY_BG)
+          .style('border-color', COLORS.BORDER)
+          .html(`<strong>${country}</strong><br/>Période: ${d.year - 4}-${d.year}<br/>${metric.title}: ${metric.formatter(d[metric.key])}`)
       })
       .on('mouseout', function () {
         d3.select(this)
           .attr('r', 3)
           .attr('opacity', 0.7)
+
+        // Restore all lines to full opacity
+        g.selectAll('.line-path')
+          .style('opacity', 1)
 
         d3.select('.linechart-tooltip')
           .style('display', 'none')

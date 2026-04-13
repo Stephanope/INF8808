@@ -91,11 +91,13 @@
 
       <section class="story-part" id="part-3">
         <p class="part-index">Partie 3</p>
-        <h2>Dataviz 3</h2>
-        <div id="heatmap-container" class="viz-container">
-          <div id="heatmap-revenue"></div>
-          <div id="heatmap-vote" style="margin-top: 50px;"></div> 
-        </div>
+        <h2>Dataviz 3 : Heatmap</h2>
+        <iframe
+          class="heatmap-embed"
+          src="heatmap.html" 
+          title="Analyse Heatmap"
+          style="width: 100%; border: none;"
+        ></iframe>
       </section>
 
       <section class="story-part" id="part-4">
@@ -126,13 +128,12 @@
         <p>blabla.</p>
       </section>
     </main>
-    <script src="https://d3js.org/d3.v7.js"></script>
     <script type="module" src="index.js"></script>
     <script>
       // Listen for iframe height messages
       window.addEventListener('message', (event) => {
         if (event.data.type === 'iframe-height') {
-          const iframes = document.querySelectorAll('.linechart-embed')
+          const iframes = document.querySelectorAll('iframe')
           iframes.forEach(iframe => {
             iframe.style.height = (event.data.height + 20) + 'px'
           })

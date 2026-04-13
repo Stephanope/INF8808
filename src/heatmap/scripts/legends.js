@@ -4,9 +4,9 @@ export function drawLegend(svg, colorScale, title, domain, config) {
     const legendWidth = 400;
     const legendHeight = 15;
     const legendX = (config.width - legendWidth) / 2;
-    const legendY = config.height - config.margin.bottom + 40;
+    const legendY = config.cellheight + 70;
 
-    const gradientId = `grad-${title.replace(/\s/g, '')}`;
+    const gradientId = `gradient-${title.replace(/[^a-zA-Z]/g, '')}`;
 
     const defs = svg.append('defs');
     const linearGradient = defs.append('linearGradient')
@@ -15,32 +15,34 @@ export function drawLegend(svg, colorScale, title, domain, config) {
         .attr('y1', '0%')
         .attr('x2', '100%')
         .attr('y2', '0%');
-
-    const stops = d3.range(0, 1.05, 0.05);
+    
+    const steps = d3.range(0, 1.1, 0.1);
     linearGradient.selectAll('stop')
-        .data(stops)
-        .enter()
-        .append('stop')
+        .data(steps)
+        .enter().append('stop')
         .attr('offset', d => `${d * 100}%`)
         .attr('stop-color', d => colorScale(domain[0] + d * (domain[1] - domain[0])));
     
     svg.append('rect')
-        .attr('x', legendX)
-        .attr('y', legendY)
-        .attr('width', legendWidth)
-        .attr('height', legendHeight)
+        .attr('x', legendX).attr('y', legendY)
+        .attr('width', legendWidth).attr('height', legendHeight)
         .style('fill', `url(#${gradientId})`)
+        .style('stroke', '#1a1a1a')
+        .style('stroke-width', '1px');
     
     const legendScale = d3.scaleLinear().domain(domain).range([0, legendWidth]);
-    const legendAxis = d3.axisBottom(legendScale).ticks(5).tickFormat(5);
+    const ticks = [domain[0], (domain[1]-domain[0])/2, domain[1]];
 
     svg.append('g')
-        .attr('transform', `translate(${legendX}, ${legendY + legendHeight})`)
-        .call(legendAxis)
+        .attr('transform', `translate(${legendX}, ${legendY + legendHeight + 15})`)
         .selectAll('text')
-        .attr('fill', 'white');
-    
-    svg.selectAll('.domain, .tick line').attr('stroke', 'white');
+        .data(ticks)
+        .enter().append('text')
+        .attr('x', d => legendScale(d))
+        .attr('text-anchor', 'middle')
+        .attr('fill', 'white')
+        .style('font-size', '12px')
+        .text(d => Math.round(d));
 
     svg.append('text')
         .attr('x', config.width / 2)

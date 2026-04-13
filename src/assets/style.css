@@ -189,6 +189,15 @@ main {
   transition: height 0.3s ease;
 }
 
+.heatmap-embed {
+  margin-top: 14px;
+  width: 100%;
+  min-height: 400px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #120f0d;
+}
+
 .dorling-toolbar {
   margin-top: 14px;
   display: flex;

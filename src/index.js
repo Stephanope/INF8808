@@ -1,5 +1,7 @@
 import * as d3 from 'd3'
 import { initDorlingMap } from './scripts/dorling-map.js'
+import { loadBoxplotData } from './scripts/boxplot-data.js'
+import { initBoxplot } from './scripts/boxplot.js'
 
 initDorlingMap().catch((error) => {
   // Keep the app usable even if remote geojson fails to load.
@@ -19,6 +21,7 @@ initDorlingMap().catch((error) => {
   }
 })
 
-
-
+loadBoxplotData().then(data => {
+  initBoxplot(data)
+}).catch(err => console.error('Boxplot init failed:', err))
 // TODO Other visualizations can be initialized here as needed.

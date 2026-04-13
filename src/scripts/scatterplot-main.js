@@ -28,12 +28,21 @@ import { initMoviePanel, updateMoviePanel } from './scatterplot-panel.js'
         updateMoviePanel(panel, focusedMovie)
       })
 
+      d3.select('#zoom-in-btn').on('click', () => {
+        chart.zoomIn()
+      })
+
+      d3.select('#zoom-out-btn').on('click', () => {
+        chart.zoomOut()
+      })
+
       const buttons = d3.selectAll('.metric-btn')
 
       const setMetric = metricKey => {
         activeMetric = METRICS[metricKey]
         buttons.classed('active', false)
         d3.select(`.metric-btn[data-metric='${metricKey}']`).classed('active', true)
+        chart.resetZoom()
         chart.render(activeMetric)
       }
 

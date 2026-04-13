@@ -12,28 +12,40 @@ import { buildColorScale, formatMoney } from './scatterplot-data.js'
 export function createScatterplot (selector, movies, onMovieFocus) {
   const container = d3.select(selector)
   const margin = { top: 56, right: 86, bottom: 56, left: 66 }
+  const clipId = 'scatterplot-plot-clip'
+  const zoomStep = 1.25
+  const minZoom = 1
+  const maxZoom = 8
+
+  let zoomLevel = 1
+  let panX = 0
+  let panY = 0
+  let currentPlot = null
+  let currentThresholdEnd = null
 
   const svg = container.append('svg')
     .attr('width', 0)
     .attr('height', 0)
 
+  const defs = svg.append('defs')
+  const plotClip = defs
+    .append('clipPath')
+    .attr('id', clipId)
+    .attr('clipPathUnits', 'userSpaceOnUse')
+    .append('rect')
+
   const root = svg.append('g').attr('class', 'plot-root')
-  const gridX = root.append('g').attr('class', 'grid grid-x')
-  const gridY = root.append('g').attr('class', 'grid grid-y')
+  const plotBody = root.append('g')
+    .attr('class', 'plot-body')
+    .attr('clip-path', `url(#${clipId})`)
+
+  const gridX = plotBody.append('g').attr('class', 'grid grid-x')
+  const gridY = plotBody.append('g').attr('class', 'grid grid-y')
   const axisX = root.append('g').attr('class', 'axis axis-x')
   const axisY = root.append('g').attr('class', 'axis axis-y')
-  const thresholdLayer = root.append('g').attr('class', 'threshold-layer')
-  const pointsLayer = root.append('g').attr('class', 'points-layer')
+  const thresholdLayer = plotBody.append('g').attr('class', 'threshold-layer')
+  const pointsLayer = plotBody.append('g').attr('class', 'points-layer')
   const legendLayer = root.append('g').attr('class', 'legend-layer')
-
-  // Groupe pour capturer les événements de zoom
-  const zoomLayer = root.append('rect')
-    .attr('class', 'zoom-layer')
-    .attr('fill', 'none')
-    .attr('pointer-events', 'all')
-
-  // Mettre le zoom layer par-dessous pour que les points soient cliquables
-  zoomLayer.lower()
 
   const xLabel = svg.append('text').attr('class', 'axis-label x-label')
   const yLabel = svg.append('text').attr('class', 'axis-label y-label')
@@ -44,6 +56,177 @@ export function createScatterplot (selector, movies, onMovieFocus) {
 
   xScale.domain([0, d3.max(movies, d => d.budget) * 1.05]).nice()
   yScale.domain([0, d3.max(movies, d => d.revenue) * 1.05]).nice()
+
+  /**
+   * Computes a centered zoomed range from a base range.
+   *
+   * @param {number[]} range The base range.
+   * @param {number} level The zoom level.
+   * @param {number} panOffset The translation offset.
+   * @returns {number[]} The zoomed range.
+   */
+  function getZoomedRange (range, level, panOffset) {
+    const start = range[0]
+    const end = range[1]
+    const center = (start + end) / 2
+
+    return [
+      center + (start - center) * level + panOffset,
+      center + (end - center) * level + panOffset
+    ]
+  }
+
+  /**
+   * Builds the scaled axes used for the current zoom level.
+   *
+   * @param {object} plot The plot dimensions.
+   * @returns {{xScaleZoomed: *, yScaleZoomed: *}} The zoomed scales.
+   */
+  function createZoomedScales (plot) {
+    const xScaleZoomed = xScale.copy()
+    const yScaleZoomed = yScale.copy()
+
+    xScaleZoomed.range(getZoomedRange([0, plot.width], zoomLevel, panX))
+    yScaleZoomed.range(getZoomedRange([plot.height, 0], zoomLevel, panY))
+
+    return { xScaleZoomed, yScaleZoomed }
+  }
+
+  /**
+   * Clamps a zoom level to the supported range.
+   *
+   * @param {number} value The candidate zoom level.
+   * @returns {number} The clamped zoom level.
+   */
+  function clampZoomLevel (value) {
+    return Math.max(minZoom, Math.min(maxZoom, value))
+  }
+
+  /**
+   * Clamps the current pan offset so the chart stays within view.
+   *
+   * @param {object} plot The plot dimensions.
+   */
+  function clampPan (plot) {
+    const maxPanX = Math.max(0, (plot.width * (zoomLevel - 1)) / 2)
+    const maxPanY = Math.max(0, (plot.height * (zoomLevel - 1)) / 2)
+
+    panX = Math.max(-maxPanX, Math.min(maxPanX, panX))
+    panY = Math.max(-maxPanY, Math.min(maxPanY, panY))
+  }
+
+  /**
+   * Keeps the pan centered when zoom is at the minimum level.
+   */
+  function normalizePan () {
+    if (zoomLevel === minZoom) {
+      panX = 0
+      panY = 0
+    }
+  }
+
+  /**
+   * Applies the current zoom state to the chart layers.
+   *
+   * @param {object} plot The plot dimensions.
+   * @param {number} thresholdEnd The threshold line endpoint.
+   */
+  function applyZoom (plot, thresholdEnd) {
+    currentPlot = plot
+    currentThresholdEnd = thresholdEnd
+
+    const { xScaleZoomed, yScaleZoomed } = createZoomedScales(plot)
+
+    const xTicks = Math.ceil(10 * zoomLevel)
+    const yTicks = Math.ceil(7 * zoomLevel)
+
+    const updateTickVisibility = (axisGroup, scale, min, max) => {
+      axisGroup.selectAll('.tick text')
+        .style('display', d => {
+          const p = scale(d)
+          return p < min || p > max ? 'none' : null
+        })
+    }
+
+    pointsLayer.selectAll('circle')
+      .attr('cx', d => xScaleZoomed(d.budget))
+      .attr('cy', d => yScaleZoomed(d.revenue))
+
+    axisX.call(d3.axisBottom(xScaleZoomed).ticks(xTicks).tickFormat(d => formatMoney(d)))
+      .call(g => g.selectAll('text')
+        .attr('fill', '#e9e9ea')
+        .style('font-size', '10px'))
+      .call(g => g.selectAll('line').attr('stroke', 'rgba(255,255,255,0.2)'))
+      .call(g => g.select('path').attr('stroke', 'rgba(255,255,255,0.2)'))
+      .call(g => g.selectAll('path, line').attr('clip-path', `url(#${clipId})`))
+
+    updateTickVisibility(axisX, xScaleZoomed, 0, plot.width)
+
+    axisY.call(d3.axisLeft(yScaleZoomed).ticks(yTicks).tickFormat(d => formatMoney(d)))
+      .call(g => g.selectAll('text')
+        .attr('fill', '#e9e9ea')
+        .style('font-size', '10px'))
+      .call(g => g.selectAll('line').attr('stroke', 'rgba(255,255,255,0.2)'))
+      .call(g => g.select('path').attr('stroke', 'rgba(255,255,255,0.2)'))
+      .call(g => g.selectAll('path, line').attr('clip-path', `url(#${clipId})`))
+
+    updateTickVisibility(axisY, yScaleZoomed, 0, plot.height)
+
+    gridX.call(d3.axisBottom(xScaleZoomed).ticks(xTicks).tickSize(-plot.height).tickFormat(''))
+      .call(g => g.selectAll('line').attr('stroke', 'rgba(255,255,255,0.11)'))
+      .call(g => g.select('path').attr('stroke', 'rgba(255,255,255,0.15)'))
+
+    gridY.call(d3.axisLeft(yScaleZoomed).ticks(yTicks).tickSize(-plot.width).tickFormat(''))
+      .call(g => g.selectAll('line').attr('stroke', 'rgba(255,255,255,0.11)'))
+      .call(g => g.select('path').attr('stroke', 'rgba(255,255,255,0.15)'))
+
+    thresholdLayer.selectAll('line')
+      .attr('x1', xScaleZoomed(0))
+      .attr('y1', yScaleZoomed(0))
+      .attr('x2', xScaleZoomed(thresholdEnd))
+      .attr('y2', yScaleZoomed(thresholdEnd))
+
+    thresholdLayer.selectAll('text')
+      .attr('x', xScaleZoomed(thresholdEnd * 0.95))
+      .attr('y', yScaleZoomed(thresholdEnd) - 8)
+  }
+
+  /**
+   * Applies the current zoom and pan state if a plot has already been rendered.
+   *
+   * @returns {boolean} True when the view was refreshed.
+   */
+  function refreshView () {
+    if (currentPlot && currentThresholdEnd !== null) {
+      applyZoom(currentPlot, currentThresholdEnd)
+      return true
+    }
+
+    return false
+  }
+
+  const dragBehavior = d3.drag()
+    .filter(event => event.button === 0)
+    .on('start', () => {
+      svg.style('cursor', 'grabbing')
+    })
+    .on('drag', (event) => {
+      if (!currentPlot) {
+        return
+      }
+
+      if (zoomLevel === minZoom) {
+        return
+      }
+
+      panY += event.dy
+      panX += event.dx
+      clampPan(currentPlot)
+      refreshView()
+    })
+    .on('end', () => {
+      svg.style('cursor', zoomLevel > minZoom ? 'grab' : 'default')
+    })
 
   /**
    * Draws the legend for the active metric.
@@ -165,88 +348,16 @@ export function createScatterplot (selector, movies, onMovieFocus) {
     svg.attr('viewBox', `0 0 ${width} ${height}`)
     svg.attr('width', width)
     svg.attr('height', height)
+    svg.style('cursor', zoomLevel > minZoom ? 'grab' : 'default')
     root.attr('transform', `translate(${margin.left}, ${margin.top})`)
-
-    // Configurer le zoom layer
-    zoomLayer
-      .attr('width', plot.width)
-      .attr('height', plot.height)
+    plotClip
+      .attr('x', margin.left - 70)
+      .attr('y', margin.top - 70)
+      .attr('width', plot.width + 15)
+      .attr('height', plot.height + 15)
 
     xScale.range([0, plot.width])
     yScale.range([plot.height, 0])
-
-    // Créer les scales zoommées (pour le zoom)
-    const xScaleZoomed = xScale.copy()
-    const yScaleZoomed = yScale.copy()
-
-    // Créer le comportement de zoom
-    const zoom = d3.zoom()
-      .scaleExtent([1, 200])
-      .on('zoom', (event) => {
-        let { x, y, k } = event.transform
-
-        // Contraindre la translation basée sur la scale
-        const maxX = 0
-        const minX = plot.width * (1 - k)
-        const maxY = 0
-        const minY = plot.height * (1 - k)
-
-        x = Math.max(minX, Math.min(maxX, x))
-        y = Math.max(minY, Math.min(maxY, y))
-
-        const transform = event.transform
-        transform.x = x
-        transform.y = y
-
-        // Appliquer la transformation aux scales
-        xScaleZoomed.range([0 * transform.k + transform.x, plot.width * transform.k + transform.x])
-        yScaleZoomed.range([plot.height * transform.k + transform.y, 0 * transform.k + transform.y])
-
-        // Mettre à jour les éléments du graphique
-        pointsLayer.selectAll('circle')
-          .attr('cx', d => xScaleZoomed(d.budget))
-          .attr('cy', d => yScaleZoomed(d.revenue))
-
-        // Ajuster le nombre de ticks dynamiquement selon le zoom
-        const xTicks = Math.ceil(10 * k)
-        const yTicks = Math.ceil(7 * k)
-
-        axisX.call(d3.axisBottom(xScaleZoomed).ticks(xTicks).tickFormat(d => formatMoney(d)))
-          .call(g => g.selectAll('text')
-            .attr('fill', '#e9e9ea')
-            .style('font-size', '10px'))
-          .call(g => g.selectAll('line').attr('stroke', 'rgba(255,255,255,0.2)'))
-          .call(g => g.select('path').attr('stroke', 'rgba(255,255,255,0.2)'))
-
-        axisY.call(d3.axisLeft(yScaleZoomed).ticks(yTicks).tickFormat(d => formatMoney(d)))
-          .call(g => g.selectAll('text')
-            .attr('fill', '#e9e9ea')
-            .style('font-size', '10px'))
-          .call(g => g.selectAll('line').attr('stroke', 'rgba(255,255,255,0.2)'))
-          .call(g => g.select('path').attr('stroke', 'rgba(255,255,255,0.2)'))
-
-        gridX.call(d3.axisBottom(xScaleZoomed).ticks(xTicks).tickSize(-plot.height).tickFormat(''))
-          .call(g => g.selectAll('line').attr('stroke', 'rgba(255,255,255,0.11)'))
-          .call(g => g.select('path').attr('stroke', 'rgba(255,255,255,0.15)'))
-
-        gridY.call(d3.axisLeft(yScaleZoomed).ticks(yTicks).tickSize(-plot.width).tickFormat(''))
-          .call(g => g.selectAll('line').attr('stroke', 'rgba(255,255,255,0.11)'))
-          .call(g => g.select('path').attr('stroke', 'rgba(255,255,255,0.15)'))
-        // Mettre à jour la ligne de seuil de rentabilité
-        thresholdLayer.selectAll('line')
-          .attr('x1', xScaleZoomed(0))
-          .attr('y1', yScaleZoomed(0))
-          .attr('x2', xScaleZoomed(thresholdEnd))
-          .attr('y2', yScaleZoomed(thresholdEnd))
-
-        // Mettre à jour le label du seuil
-        thresholdLayer.selectAll('text')
-          .attr('x', xScaleZoomed(thresholdEnd * 0.95))
-          .attr('y', yScaleZoomed(thresholdEnd) - 8)
-      })
-
-    // Appliquer le zoom au zoom layer
-    zoomLayer.call(zoom)
 
     const xAxis = d3.axisBottom(xScale)
       .ticks(10)
@@ -281,6 +392,13 @@ export function createScatterplot (selector, movies, onMovieFocus) {
         .style('font-size', '10px'))
       .call(g => g.selectAll('line').attr('stroke', 'rgba(255,255,255,0.2)'))
       .call(g => g.select('path').attr('stroke', 'rgba(255,255,255,0.2)'))
+      .call(g => g.selectAll('path, line').attr('clip-path', `url(#${clipId})`))
+
+    axisX.selectAll('.tick text')
+      .style('display', d => {
+        const p = xScale(d)
+        return p < 0 || p > plot.width ? 'none' : null
+      })
 
     axisY
       .call(yAxis)
@@ -289,6 +407,13 @@ export function createScatterplot (selector, movies, onMovieFocus) {
         .style('font-size', '10px'))
       .call(g => g.selectAll('line').attr('stroke', 'rgba(255,255,255,0.2)'))
       .call(g => g.select('path').attr('stroke', 'rgba(255,255,255,0.2)'))
+      .call(g => g.selectAll('path, line').attr('clip-path', `url(#${clipId})`))
+
+    axisY.selectAll('.tick text')
+      .style('display', d => {
+        const p = yScale(d)
+        return p < 0 || p > plot.height ? 'none' : null
+      })
 
     xLabel
       .attr('x', margin.left + plot.width / 2)
@@ -296,6 +421,7 @@ export function createScatterplot (selector, movies, onMovieFocus) {
       .attr('fill', '#d6d8dc')
       .style('font-size', '12px')
       .text('Budget ($)')
+      .call(g => g.selectAll('path, line').attr('clip-path', `url(#${clipId})`))
 
     yLabel
       .attr('x', -(margin.top + plot.height / 2))
@@ -304,9 +430,11 @@ export function createScatterplot (selector, movies, onMovieFocus) {
       .attr('fill', '#d6d8dc')
       .style('font-size', '12px')
       .text('Revenue ($)')
+      .call(g => g.selectAll('path, line').attr('clip-path', `url(#${clipId})`))
 
     const maxBudget = d3.max(movies, d => d.budget)
     const thresholdEnd = maxBudget * 1.08
+    currentThresholdEnd = thresholdEnd
 
     thresholdLayer.selectAll('*').remove()
     thresholdLayer
@@ -340,6 +468,7 @@ export function createScatterplot (selector, movies, onMovieFocus) {
           .attr('fill', d => colorScale(d[metric.key]))
           .attr('opacity', 0.84)
           .on('mouseenter', function (event, d) {
+            svg.style('cursor', 'pointer')
             d3.select(this)
               .attr('r', 5.2)
               .attr('stroke', '#f8fff8')
@@ -354,22 +483,77 @@ export function createScatterplot (selector, movies, onMovieFocus) {
             d3.select(this)
               .attr('r', 2.3)
               .attr('stroke', null)
+            svg.style('cursor', zoomLevel > minZoom ? 'grab' : 'default')
             hideTooltip()
           })
           .on('click', function (event, d) {
             onMovieFocus(d)
           }),
         update => update
-          .transition()
-          .duration(350)
-          .attr('cx', d => xScale(d.budget))
-          .attr('cy', d => yScale(d.revenue))
-          .attr('fill', d => colorScale(d[metric.key])),
+          .call(selection => {
+            if (zoomLevel > minZoom) {
+              selection
+                .transition()
+                .duration(350)
+                .attr('cx', d => xScale(d.budget))
+                .attr('cy', d => yScale(d.revenue))
+                .attr('fill', d => colorScale(d[metric.key]))
+            } else {
+              selection
+                .interrupt()
+                .attr('cx', d => xScale(d.budget))
+                .attr('cy', d => yScale(d.revenue))
+                .attr('fill', d => colorScale(d[metric.key]))
+            }
+          }),
         exit => exit.remove()
       )
+
+    pointsLayer.selectAll('circle')
+      .attr('fill', d => colorScale(d[metric.key]))
+
+    applyZoom(plot, thresholdEnd)
+    svg.call(dragBehavior)
 
     drawLegend(metric, colorScale, plot)
   }
 
-  return { render }
+  return {
+    render,
+    resetZoom: () => {
+      zoomLevel = minZoom
+      panX = 0
+      panY = 0
+      svg.style('cursor', 'default')
+
+      if (currentPlot && currentThresholdEnd !== null) {
+        applyZoom(currentPlot, currentThresholdEnd)
+      }
+    },
+    zoomIn: () => {
+      const plotWidth = Math.max(760, container.node().getBoundingClientRect().width || container.node().parentElement.getBoundingClientRect().width) - margin.left - margin.right
+      const plotHeight = Math.max(620, container.node().getBoundingClientRect().height || container.node().parentElement.getBoundingClientRect().height) - margin.top - margin.bottom
+      zoomLevel = clampZoomLevel(zoomLevel * zoomStep)
+      if (currentPlot) {
+        clampPan(currentPlot)
+      }
+      svg.style('cursor', zoomLevel > minZoom ? 'grab' : 'default')
+      if (!refreshView()) {
+        applyZoom({ width: plotWidth, height: plotHeight }, d3.max(movies, d => d.budget) * 1.08)
+      }
+    },
+    zoomOut: () => {
+      const plotWidth = Math.max(760, container.node().getBoundingClientRect().width || container.node().parentElement.getBoundingClientRect().width) - margin.left - margin.right
+      const plotHeight = Math.max(620, container.node().getBoundingClientRect().height || container.node().parentElement.getBoundingClientRect().height) - margin.top - margin.bottom
+      zoomLevel = clampZoomLevel(zoomLevel / zoomStep)
+      normalizePan()
+      if (currentPlot) {
+        clampPan(currentPlot)
+      }
+      svg.style('cursor', zoomLevel > minZoom ? 'grab' : 'default')
+      if (!refreshView()) {
+        applyZoom({ width: plotWidth, height: plotHeight }, d3.max(movies, d => d.budget) * 1.08)
+      }
+    }
+  }
 }

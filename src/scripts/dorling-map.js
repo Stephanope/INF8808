@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 
-const MOVIES_DATA_URL = './assets/data/movies_clean.csv'
+const MOVIES_DATA_URL = './movies_clean.csv'
 const WORLD_GEOJSON_URL =
   'https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson'
 

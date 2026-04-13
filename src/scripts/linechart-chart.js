@@ -2,6 +2,45 @@ import * as d3 from 'd3'
 import { formatMoney, formatCount } from './linechart-data.js'
 import { COLORS, CHART_COLORS, translateCountryName } from './util.js'
 
+function resolveChartWidth (selector) {
+  const node = document.querySelector(selector)
+  const containerWidth = node ? Math.floor(node.getBoundingClientRect().width) : 0
+  return Math.max(320, containerWidth || (window.innerWidth - 100))
+}
+
+function placeTooltipWithinViewport (tooltip, event) {
+  const offset = 12
+  const tooltipNode = tooltip.node()
+  if (!tooltipNode) {
+    return
+  }
+
+  const tooltipRect = tooltipNode.getBoundingClientRect()
+  const viewportWidth = window.innerWidth
+  const viewportHeight = window.innerHeight
+
+  let left = event.clientX + offset
+  let top = event.clientY + offset
+
+  if (left + tooltipRect.width > viewportWidth - 8) {
+    left = event.clientX - tooltipRect.width - offset
+  }
+  if (left < 8) {
+    left = 8
+  }
+
+  if (top + tooltipRect.height > viewportHeight - 8) {
+    top = event.clientY - tooltipRect.height - offset
+  }
+  if (top < 8) {
+    top = 8
+  }
+
+  tooltip
+    .style('left', `${left}px`)
+    .style('top', `${top}px`)
+}
+
 /**
  * Creates the multi-line chart visualization.
  *
@@ -14,7 +53,7 @@ export function createLineCharts (selector, data) {
 
   // Chart dimensions
   const margin = { top: 15, right: 30, bottom: 45, left: 70 }
-  const width = window.innerWidth - 100
+  const width = resolveChartWidth(selector)
   const height = 220
 
   // Create three chart sections
@@ -73,7 +112,7 @@ export function createCountryLineCharts (selector, data) {
 
   // Chart dimensions
   const margin = { top: 15, right: 30, bottom: 45, left: 70 }
-  const width = window.innerWidth - 100
+  const width = resolveChartWidth(selector)
   const height = 220
 
   // Color scale for countries (colorblind-friendly palette)
@@ -171,6 +210,8 @@ function drawCountryLineChart (container, countryData, countries, metric, colorS
   const svg = container.append('svg')
     .attr('width', width)
     .attr('height', height)
+    .attr('viewBox', `0 0 ${width} ${height}`)
+    .attr('preserveAspectRatio', 'xMinYMin meet')
     .attr('class', 'line-chart-svg')
 
   const g = svg.append('g')
@@ -246,11 +287,11 @@ function drawCountryLineChart (container, countryData, countries, metric, colorS
         const tooltip = d3.select('.linechart-tooltip')
         tooltip
           .style('display', 'block')
-          .style('left', event.pageX + 10 + 'px')
-          .style('top', event.pageY + 10 + 'px')
           .style('background-color', COLORS.SECONDARY_BG)
           .style('border-color', COLORS.BORDER)
           .html(`<strong>${country}</strong><br/>Période: ${d.year - 4}-${d.year}<br/>${metric.title}: ${metric.formatter(d[metric.key])}`)
+
+        placeTooltipWithinViewport(tooltip, event)
       })
       .on('mouseout', function () {
         d3.select(this)
@@ -327,6 +368,8 @@ function drawLineChart (container, data, chart, margin, width, height) {
   const svg = container.append('svg')
     .attr('width', width)
     .attr('height', height)
+    .attr('viewBox', `0 0 ${width} ${height}`)
+    .attr('preserveAspectRatio', 'xMinYMin meet')
     .attr('class', 'line-chart-svg')
 
   const g = svg.append('g')
@@ -385,9 +428,9 @@ function drawLineChart (container, data, chart, margin, width, height) {
       const tooltip = d3.select('.linechart-tooltip')
       tooltip
         .style('display', 'block')
-        .style('left', event.pageX + 10 + 'px')
-        .style('top', event.pageY + 10 + 'px')
         .html(`<strong>Année: ${d.year}</strong><br/>${chart.title}: ${chart.formatter(d[chart.key])}`)
+
+      placeTooltipWithinViewport(tooltip, event)
     })
     .on('mouseout', function () {
       d3.select(this)

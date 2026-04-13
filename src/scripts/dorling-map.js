@@ -151,6 +151,49 @@ function ensureTooltip (container) {
 }
 
 /**
+ * Positions the tooltip so it stays fully visible within the map container.
+ *
+ * @param {*} tooltip The tooltip selection.
+ * @param {*} container The map container selection.
+ * @param {number} x Pointer x in container coordinates.
+ * @param {number} y Pointer y in container coordinates.
+ */
+function placeTooltipInBounds (tooltip, container, x, y) {
+  const tooltipNode = tooltip.node()
+  const containerNode = container.node()
+  if (!tooltipNode || !containerNode) {
+    return
+  }
+
+  const offset = 12
+  const tooltipWidth = tooltipNode.offsetWidth || 0
+  const tooltipHeight = tooltipNode.offsetHeight || 0
+  const containerWidth = containerNode.clientWidth || 0
+  const containerHeight = containerNode.clientHeight || 0
+
+  let left = x + offset
+  let top = y - tooltipHeight - offset
+
+  if (left + tooltipWidth > containerWidth - 8) {
+    left = x - tooltipWidth - offset
+  }
+  if (left < 8) {
+    left = 8
+  }
+
+  if (top < 8) {
+    top = y + offset
+  }
+  if (top + tooltipHeight > containerHeight - 8) {
+    top = containerHeight - tooltipHeight - 8
+  }
+
+  tooltip
+    .style('left', `${left}px`)
+    .style('top', `${top}px`)
+}
+
+/**
  * Renders the Dorling map for the selected color metric.
  *
  * @param {*} container The map container selection.
@@ -170,6 +213,12 @@ function drawDorlingMap (container, world, stats, colorMetricKey) {
     .join('svg')
     .attr('viewBox', `0 0 ${width} ${height}`)
     .attr('aria-label', 'Carte de Dorling des pays de production')
+
+  const sceneGroup = svg
+    .selectAll('.dorling-scene')
+    .data([null])
+    .join('g')
+    .attr('class', 'dorling-scene')
 
   const worldFeatures = world.features.filter(
     (feature) => normalizeCountryName(feature.properties.name) !== 'antarctica'
@@ -193,22 +242,22 @@ function drawDorlingMap (container, world, stats, colorMetricKey) {
     .translate([translateX, translateY - height * 0.07])
   const geoPath = d3.geoPath(projection)
 
-  const countriesGroup = svg
+  const countriesGroup = sceneGroup
     .selectAll('.dorling-countries')
     .data([null])
     .join('g')
     .attr('class', 'dorling-countries')
-  const bubblesGroup = svg
+  const bubblesGroup = sceneGroup
     .selectAll('.dorling-bubbles')
     .data([null])
     .join('g')
     .attr('class', 'dorling-bubbles')
-  const labelsGroup = svg
+  const labelsGroup = sceneGroup
     .selectAll('.dorling-labels')
     .data([null])
     .join('g')
     .attr('class', 'dorling-labels')
-  const legendGroup = svg
+  const legendGroup = sceneGroup
     .selectAll('.dorling-legend')
     .data([null])
     .join('g')
@@ -322,12 +371,12 @@ function drawDorlingMap (container, world, stats, colorMetricKey) {
     .on('mousemove', function (event, d) {
       const [x, y] = d3.pointer(event, container.node())
       tooltip
-        .style('left', `${x + 12}px`)
-        .style('top', `${Math.max(12, y - 12)}px`)
         .html(
           `<strong>${d.country}</strong><br/>${SIZE_METRIC.label}: ${SIZE_METRIC.format(d.sizeValue)}<br/>${colorMetric.label}: ${colorMetric.format(d.colorValue)}`
         )
         .classed('visible', true)
+
+      placeTooltipInBounds(tooltip, container, x, y)
     })
     .on('mouseleave', function () {
       tooltip.classed('visible', false)
@@ -480,6 +529,23 @@ function drawDorlingMap (container, world, stats, colorMetricKey) {
     )
     .call((g) => g.selectAll('line').attr('stroke', '#7a6d5d'))
     .call((g) => g.select('path').attr('stroke', '#7a6d5d'))
+
+  // If the composed map scene is larger than the viewport, scale it down as a whole.
+  const sceneNode = sceneGroup.node()
+  if (sceneNode) {
+    const bbox = sceneNode.getBBox()
+    if (bbox.width > 0 && bbox.height > 0) {
+      const padding = 6
+      const scale = Math.min(
+        1,
+        (width - padding * 2) / bbox.width,
+        (height - padding * 2) / bbox.height
+      )
+      const tx = (width - bbox.width * scale) / 2 - bbox.x * scale
+      const ty = (height - bbox.height * scale) / 2 - bbox.y * scale
+      sceneGroup.attr('transform', `translate(${tx},${ty}) scale(${scale})`)
+    }
+  }
 }
 
 /**

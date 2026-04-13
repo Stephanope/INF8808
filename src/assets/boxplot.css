@@ -71,7 +71,7 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   overflow: hidden;
-  background: #fffcf5;
+  background: #323131;
 }
 
 .boxplot-wrap svg {

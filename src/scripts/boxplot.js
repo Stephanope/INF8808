@@ -134,7 +134,7 @@ export function initBoxplot (data) {
             .attr('transform', 'rotate(-35)')
             .style('text-anchor', 'end')
             .style('font-size', '11px')
-            .style('fill', '#707070')
+            .style('fill', '#FFFFFF')
 
         const yAxis = metric === 'revenue'
             ? d3.axisLeft(yScale).ticks(6, '~s')
@@ -143,13 +143,13 @@ export function initBoxplot (data) {
         g.append('g')
             .call(yAxis)
             .selectAll('text')
-            .style('fill', '#707070')
+            .style('fill', '#FFFFFF')
 
         g.append('text')
             .attr('transform', `translate(${innerW / 2}, ${innerH + MARGIN.bottom - 8})`)
             .attr('text-anchor', 'middle')
             .style('font-size', '13px')
-            .style('fill', '#707070')
+            .style('fill', '#FFFFFF')
             .text('Genres')
 
         g.append('text')
@@ -158,7 +158,7 @@ export function initBoxplot (data) {
             .attr('x', -innerH / 2)
             .attr('text-anchor', 'middle')
             .style('font-size', '13px')
-            .style('fill', '#707070')
+            .style('fill', '#FFFFFF')
             .text(metric === 'revenue' ? 'Revenus (USD)' : 'Note sur 10')
 
         const boxW = xScale.bandwidth()
@@ -172,14 +172,14 @@ export function initBoxplot (data) {
                 g.append('line')
                     .attr('x1', cx).attr('x2', cx)
                     .attr('y1', fromY).attr('y2', yScale(val))
-                    .attr('stroke', '#000000')
-                    .attr('stroke-width', 1)
+                    .attr('stroke', '#FFFFFF')
+                    .attr('stroke-width', 1.5)
 
                 g.append('line')
                     .attr('x1', cx - boxW * 0.15).attr('x2', cx + boxW * 0.15)
                     .attr('y1', yScale(val)).attr('y2', yScale(val))
-                    .attr('stroke', '#000000')
-                    .attr('stroke-width', 1)
+                    .attr('stroke', '#FFFFFF')
+                    .attr('stroke-width', 1.5)
             })
 
             const boxEl = g.append('rect')
@@ -197,21 +197,30 @@ export function initBoxplot (data) {
             const medLine = g.append('line')
                 .attr('x1', xScale(genre)).attr('x2', xScale(genre) + boxW)
                 .attr('y1', yScale(stats.median)).attr('y2', yScale(stats.median))
-                .attr('stroke', '#000000').attr('stroke-width', 2)
+                .attr('stroke', '#FFFFFF').attr('stroke-width', 2)
 
             function fmt (v) {
                 return metric === 'revenue' ? `$${d3.format(',.0f')(v)}` : v.toFixed(2)
             }
 
             function showTip(event) {
+                const rect = container.getBoundingClientRect()
+                const x = event.clientX - rect.left
+                const y = event.clientY - rect.top 
                 tooltip.classed('visible', true).html(`
                     <strong>${genre}</strong><br/>
                     Mediane : ${fmt(stats.median)}<br/>
-                    Q1 : ${fmt(stats.q1)} - Q3 : ${fmt(stats.q3)}<br/>
-                    Min : ${fmt(stats.min)} - Max : ${fmt(stats.max)}<br/>
+                    Q1 : ${fmt(stats.q1)}<br/>
+                    Q3 : ${fmt(stats.q3)}<br/>
+                    Min : ${fmt(stats.min)}<br/>
+                    Max : ${fmt(stats.max)}<br/>
                     Films : ${stats.count}
                 `)
-                moveTip(event)
+                
+                const left = x + 140 + 20 > rect.width ? x - 140 - 10 : x + 14
+                tooltip
+                    .style('left', `${left}px`)
+                    .style('top', `${y - 10}px`)
             }
 
             function moveTip(event) {
@@ -226,7 +235,6 @@ export function initBoxplot (data) {
 
             ;[boxEl, medLine].forEach(el => {
                 el.on('mouseover', showTip)
-                    .on('mousemove', moveTip)
                     .on('mouseout', hideTip)
             })
         })

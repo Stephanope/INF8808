@@ -1,12 +1,12 @@
 :root {
-  --bg: #323131;
-  --bg-soft: #efe8dc;
-  --ink: #24221f;
-  --ink-muted: #5f5a52;
+  --bg: #1f1f1f;
+  --bg-soft: #262626;
+  --ink: #f0f0f0;
+  --ink-muted: #bebebe;
   --brand-dark: #17120f;
-  --brand-accent: #bf2f24;
-  --card: #fffcf5;
-  --line: #cbc1b3;
+  --brand-accent: #e50914;
+  --card: #171717;
+  --line: #353535;
 }
 
 * {
@@ -21,7 +21,7 @@ body {
   font-family: "Roboto Slab", "sans-serif";
   font-size: 16px;
   background:
-    radial-gradient(circle at top right, #f9f1e4 0%, transparent 40%),
+    radial-gradient(circle at top right, rgba(229, 9, 20, 0.12) 0%, transparent 34%),
     linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
   color: var(--ink);
   margin: 0;
@@ -30,47 +30,24 @@ body {
   flex-direction: column;
 }
 
-header {
-  background: linear-gradient(90deg, #0c0908 0%, #1a1411 100%);
-  padding: 20px clamp(16px, 4vw, 42px);
-  border-bottom: 2px solid #3a2e29;
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1200;
+  background: #0a0a0a;
+  padding: 14px clamp(16px, 4vw, 42px);
+  border-bottom: 2px solid rgba(229, 9, 20, 0.65);
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 16px;
 }
 
-.menu-trigger {
-  position: fixed;
-  top: 14px;
-  left: 14px;
-  z-index: 1200;
-  font-size: 30px;
-  cursor: pointer;
-  color: #ffffff;
-  background: rgba(15, 12, 10, 0.86);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 10px;
-  width: 46px;
-  height: 46px;
-  padding: 0;
-  line-height: 1;
-  transition:
-    transform 0.2s ease,
-    color 0.2s ease;
-}
-
-.menu-trigger:hover {
-  color: #ffd8a5;
-  transform: translateY(-1px);
-}
-
 .logo {
-  margin-left: 25px;
-  color: #e55348;
+  color: #ffffff;
   font-family: "Roboto Slab", "serif";
-  font-size: clamp(24px, 4vw, 34px);
+  font-size: clamp(22px, 3.4vw, 30px);
   letter-spacing: 0.02em;
-  text-shadow: 0 1px 0 #000;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -81,6 +58,32 @@ header {
   height: 34px;
   border-radius: 6px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+}
+
+.top-nav {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.top-nav a {
+  text-decoration: none;
+  color: #e6e6e6;
+  font-family: "Roboto", "sans-serif";
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 2px;
+  border-bottom: 2px solid transparent;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.top-nav a:hover,
+.top-nav a:focus-visible {
+  color: #ffffff;
+  border-bottom-color: var(--brand-accent);
+  outline: none;
 }
 
 main {
@@ -111,7 +114,7 @@ main {
   margin: 0;
   font-size: clamp(30px, 5vw, 52px);
   line-height: 1.05;
-  color: #191612;
+  color: #cfcecb;
 }
 
 .hero-description {
@@ -161,7 +164,7 @@ main {
 .story-part h2 {
   margin: 8px 0 10px;
   font-size: clamp(24px, 3vw, 34px);
-  color: #1f1a16;
+  color: #f3f3f3;
 }
 
 .story-part p {
@@ -187,6 +190,15 @@ main {
   border-radius: 12px;
   background: #120f0d;
   transition: height 0.3s ease;
+}
+
+.heatmap-embed {
+  margin-top: 14px;
+  width: 100%;
+  min-height: 400px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #120f0d;
 }
 
 .dorling-toolbar {
@@ -282,58 +294,24 @@ main {
   text-decoration: underline;
 }
 
-.sidenav {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1400;
-  top: 0;
-  left: 0;
-  background-color: #111;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
+#heatmap-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
 }
-
-.sidenav a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 22px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidenav a:hover {
-  color: #e6e3e3;
-  text-decoration: underline;
-  text-decoration-color: #9b2828;
-  text-decoration-thickness: 2px;
-}
-
-.sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
+.cell { stroke: #1a1a1a; stroke-width: 2px; }
+.cell:hover { stroke: white; stroke-width: 3px; cursor: pointer; }
 
 @media screen and (max-width: 900px) {
-  header {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 10px;
   }
 
   .logo {
     font-size: 26px;
-  }
-}
-
-@media screen and (max-height: 450px) {
-  .sidenav {
-    padding-top: 15px;
-  }
-  .sidenav a {
-    font-size: 18px;
   }
 }

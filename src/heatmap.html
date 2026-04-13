@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Heatmap Component</title>
+    <style>
+        body { background-color: #2b2b2b; color: #fff; font-family: sans-serif; }
+        #heatmap-container { width: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="heatmap-wrapper">
+        <div class="viz-block">
+            <div id="heatmap-revenue"></div>
+        </div>
+        
+        <div class="viz-block" style="margin-top: 50px;">
+            <div id="heatmap-vote"></div>
+        </div>
+    </div>
+
+    <script type="module" src="./heatmap/heatmap-main.js"></script>
+
+    <script>
+      function updateHeight() {
+        const height = document.body.scrollHeight;
+        window.parent.postMessage({ type: 'iframe-height', height: height }, '*');
+      }
+      window.addEventListener('load', updateHeight);
+      new ResizeObserver(updateHeight).observe(document.body);
+    </script>
+  </body>
+</html>

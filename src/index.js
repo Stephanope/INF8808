@@ -18,4 +18,7 @@ initDorlingMap().catch((error) => {
       )
   }
 })
+
+
+
 // TODO Other visualizations can be initialized here as needed.

@@ -14,15 +14,7 @@
   </head>
 
   <body>
-    <header>
-      <button
-        class="menu-trigger"
-        type="button"
-        aria-label="Ouvrir le menu"
-        onclick="openNav()"
-      >
-        &#9776;
-      </button>
+    <header class="site-header">
       <div class="logo">
         <img
           class="logo-icon"
@@ -31,25 +23,13 @@
         />
         <span>INF8808-flix</span>
       </div>
-      <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
-          >&times;</a
-        >
-        <a href="#part-1" onclick="closeNav()">Partie 1 - Scatterplot</a>
-        <a href="#part-2" onclick="closeNav()">Partie 2 - Multi-line Chart</a>
-        <a href="#part-3" onclick="closeNav()">Partie 3 - Dataviz 3</a>
-        <a href="#part-4" onclick="closeNav()">Partie 4 - Dorling map</a>
-        <a href="#part-5" onclick="closeNav()">Partie 5 - Dataviz 5</a>
-      </div>
-      <script>
-        function openNav() {
-          document.getElementById("mySidenav").style.width = "250px";
-        }
-
-        function closeNav() {
-          document.getElementById("mySidenav").style.width = "0";
-        }
-      </script>
+      <nav class="top-nav" aria-label="Navigation principale">
+        <a href="#part-1">Scatterplot</a>
+        <a href="#part-2">Multi-line Chart</a>
+        <a href="#part-3">Dataviz 3</a>
+        <a href="#part-4">Dorling map</a>
+        <a href="#part-5">Dataviz 5</a>
+      </nav>
     </header>
     <main>
       <section class="landing-hero" id="intro">

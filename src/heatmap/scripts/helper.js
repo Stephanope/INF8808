@@ -9,7 +9,20 @@ export function generateSVG(containerId, width, height, margin) {
     const g = svg.append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
     
-    const title = containerId.includes('revenue') ? 'REVENUE' : 'NOTE CRITIQUE';
+    let title = '';
+    
+    switch (true) {
+        case containerId.includes('revenue'):
+            title = 'REVENUE';
+            break;
+        case containerId.includes('vote'):
+            title = 'NOTE CRITIQUE';
+            break;
+        case containerId.includes('count'):
+            title = 'NOMBRE DE FILMS';
+            break;
+    }
+    
     svg.append('text')
         .attr('x', width / 2)
         .attr('y', margin.top / 2)

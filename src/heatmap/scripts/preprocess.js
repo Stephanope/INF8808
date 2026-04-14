@@ -44,6 +44,7 @@ export function formatData(rawData) {
             month: stat.month,
             Revenue: Math.round(avgRevenueMillions * 100) / 100,
             Rating: Math.round(avgRating * 100) / 100,
+            Count: stat.revenueCount
         };
     });
 

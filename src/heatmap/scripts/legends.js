@@ -42,7 +42,7 @@ export function drawLegend(svg, colorScale, title, domain, config) {
         .attr('text-anchor', 'middle')
         .attr('fill', 'white')
         .style('font-size', '12px')
-        .text(d => Math.round(d));
+        .text(d => d.toFixed(0));
 
     svg.append('text')
         .attr('x', config.width / 2)

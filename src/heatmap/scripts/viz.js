@@ -4,18 +4,19 @@ import * as scales from './scales.js';
 import * as legends from './legends.js';
 
 export function buildHeatmaps(data, config) {
-    const revenueScale = scales.getRevenueScale(data);
-    const ratingScale = scales.getRatingScale(data);
-
     const maxRevenue = d3.max(data, d => d.Revenue);
-    const maxRating = 10;
+    const maxCount = d3.max(data, d => d.Count);
+    
+    const revenueScale = scales.getScale(0, maxRevenue);
+    const ratingScale = scales.getScale(0, 10);
+    const countScale = scales.getScale(0, maxCount);
 
     drawHeatmap(
         "#heatmap-revenue", 
         data, 
         "Revenue", 
         revenueScale, 
-        'Revenue (Millions $ USD)', 
+        'Revenue moyen (Millions $ USD)', 
         [0, maxRevenue],
         config
     );
@@ -26,7 +27,17 @@ export function buildHeatmaps(data, config) {
         "Rating",
         ratingScale,
         'Note moyenne (0-10)',
-        [0, maxRating],
+        [0, 10],
+        config
+    );
+
+    drawHeatmap(
+        "#heatmap-count", 
+        data,
+        "Count",
+        countScale,
+        'Nombre de Film',
+        [0, maxCount],
         config
     );
 }

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movies Dorling Map | INF8808</title>
+
+    <link rel="stylesheet" href="assets/typography.css" />
+    <link rel="stylesheet" href="assets/dorling.css" />
+  </head>
+
+  <body class="dorling-page">
+    <main class="dorling-shell">
+      <div id="dorling-map" class="dorling-map" aria-label="Dorling map"></div>
+    </main>
+
+    <script type="module" src="scripts/dorling-main.js"></script>
+    <script>
+      const MIN_IFRAME_HEIGHT = 500;
+      const MAX_IFRAME_HEIGHT = 640;
+
+      function updateIframeHeight() {
+        const rawHeight = document.documentElement.scrollHeight;
+        const height = Math.max(
+          MIN_IFRAME_HEIGHT,
+          Math.min(rawHeight, MAX_IFRAME_HEIGHT),
+        );
+        window.parent.postMessage(
+          {
+            type: "iframe-height",
+            height,
+          },
+          "*",
+        );
+      }
+
+      const observer = new ResizeObserver(() => {
+        updateIframeHeight();
+      });
+
+      observer.observe(document.body);
+
+      window.addEventListener("load", () => {
+        updateIframeHeight();
+      });
+
+      setTimeout(() => {
+        updateIframeHeight();
+      }, 250);
+    </script>
+  </body>
+</html>

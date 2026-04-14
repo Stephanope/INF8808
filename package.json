@@ -29,5 +29,8 @@
     "staticPath": [
       "./src/assets/data"
     ]
+  },
+  "htmlnano": {
+    "minifySvg": false
   }
 }

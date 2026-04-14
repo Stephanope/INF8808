@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="assets/style.css" />
     <link rel="stylesheet" href="assets/typography.css" />
     <link rel="stylesheet" href="assets/boxplot.css" />
+    <link rel="stylesheet" href="assets/dorling.css" />
   </head>
 
   <body>
@@ -59,9 +60,15 @@
 
       <section class="story-part" id="part-2">
         <p class="part-index">Partie 2</p>
-        <h2>Évolution du nombre de films, du budget moyen et des revenus moyens par année</h2>
+        <h2>
+          Évolution du nombre de films, du budget moyen et des revenus moyens
+          par année
+        </h2>
         <p>
-          Les graphiques ci-dessous montrent l'évolution de trois indicateurs clés des productions cinématographiques mondiales, regroupés par périodes de 5 ans. Chaque point représente la moyenne des 5 années précédentes (ex: 1955 = moyenne 1951-1955).
+          Les graphiques ci-dessous montrent l'évolution de trois indicateurs
+          clés des productions cinématographiques mondiales, regroupés par
+          périodes de 5 ans. Chaque point représente la moyenne des 5 années
+          précédentes (ex: 1955 = moyenne 1951-1955).
         </p>
         <iframe
           class="linechart-embed"
@@ -75,26 +82,38 @@
         <h2>Dataviz 3 : Heatmap</h2>
         <iframe
           class="heatmap-embed"
-          src="heatmap.html" 
+          src="heatmap.html"
           title="Analyse Heatmap"
-          style="width: 100%; border: none;"
+          style="width: 100%; border: none"
         ></iframe>
       </section>
 
       <section class="story-part" id="part-4">
         <p class="part-index">Partie 4</p>
-        <h2>Dorling map</h2>
+        <h2>Répartition géographique des films</h2>
         <p>
-          Repartition geographique des films par pays de production en
-          <strong>carte de Dorling</strong>
+          Carte de Dorling des pays de production. La taille des bulles
+          représente le nombre de films et la couleur indique les revenus ou les
+          notes.
         </p>
-        <div class="dorling-toolbar" aria-label="Controle de la Dorling map">
+        <br />
+        <p class="dorling-fact" id="dorling-fact"></p>
+        <br />
+        <div class="chart-toolbar" aria-label="Controle de la Dorling map">
           <span><strong>Taille:</strong> Nombre de films (fixe)</span>
-          <label for="dorling-color">Couleur:</label>
-          <select id="dorling-color">
-            <option value="revenue">Revenus cumules</option>
-            <option value="vote">Note moyenne</option>
-          </select>
+          <span>Couleur des points :</span>
+          <div class="metric-buttons">
+            <button
+              class="dorling-metric-btn active"
+              data-metric="revenue"
+              type="button"
+            >
+              Revenus
+            </button>
+            <button class="dorling-metric-btn" data-metric="vote" type="button">
+              Notes
+            </button>
+          </div>
         </div>
         <div
           id="dorling-map"
@@ -106,19 +125,34 @@
       <section class="story-part" id="part-5">
         <p class="part-index">Partie 5</p>
         <h2>Distribution par genre</h2>
-        <p>Boites a moustaches des revenus et des notes selon le genre cinematographique.</p>
+        <p>
+          Boites a moustaches des revenus et des notes selon le genre
+          cinematographique.
+        </p>
         <div class="bp-toolbar" id="boxplot-toolbar">
           <div class="bp-toggle-group">
             <span class="bp-toolbar-label">Filtrer par :</span>
-            <button class="bp-toggle active" data-metric="revenue">Revenus</button>
+            <button class="bp-toggle active" data-metric="revenue">
+              Revenus
+            </button>
             <button class="bp-toggle" data-metric="vote">Notes</button>
           </div>
           <div class="bp-slider-group">
             <span class="bp-toolbar-label">Periode :</span>
             <span class="bp-year-label" id="bp-year-min">-</span>
             <div class="bp-range-wrap">
-              <input class="bp-slider" id="bp-slider-min" type="range" step="1" />
-              <input class="bp-slider" id="bp-slider-max" type="range" step="1" />
+              <input
+                class="bp-slider"
+                id="bp-slider-min"
+                type="range"
+                step="1"
+              />
+              <input
+                class="bp-slider"
+                id="bp-slider-max"
+                type="range"
+                step="1"
+              />
             </div>
             <span class="bp-year-label" id="bp-year-max">-</span>
           </div>
@@ -132,14 +166,14 @@
     <script type="module" src="index.js"></script>
     <script>
       // Listen for iframe height messages
-      window.addEventListener('message', (event) => {
-        if (event.data.type === 'iframe-height') {
-          const iframes = document.querySelectorAll('iframe')
-          iframes.forEach(iframe => {
-            iframe.style.height = (event.data.height + 20) + 'px'
-          })
+      window.addEventListener("message", (event) => {
+        if (event.data.type === "iframe-height") {
+          const iframes = document.querySelectorAll("iframe");
+          iframes.forEach((iframe) => {
+            iframe.style.height = event.data.height + 20 + "px";
+          });
         }
-      })
+      });
     </script>
   </body>
 </html>

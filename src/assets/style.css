@@ -21,7 +21,11 @@ body {
   font-family: "Roboto Slab", "sans-serif";
   font-size: 16px;
   background:
-    radial-gradient(circle at top right, rgba(229, 9, 20, 0.12) 0%, transparent 34%),
+    radial-gradient(
+      circle at top right,
+      rgba(229, 9, 20, 0.12) 0%,
+      transparent 34%
+    ),
     linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
   color: var(--ink);
   margin: 0;
@@ -173,6 +177,16 @@ main {
   line-height: 1.7;
 }
 
+.dorling-fact {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--brand-accent);
+  background: rgba(229, 9, 20, 0.08);
+  color: #f2efea;
+  font-family: "Roboto", "sans-serif";
+  font-size: 14px;
+}
+
 .scatterplot-embed {
   margin-top: 14px;
   width: 100%;
@@ -192,6 +206,15 @@ main {
   transition: height 0.3s ease;
 }
 
+.dorling-embed {
+  margin-top: 14px;
+  width: 100%;
+  height: clamp(500px, 58vh, 640px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #313131;
+}
+
 .heatmap-embed {
   margin-top: 14px;
   width: 100%;
@@ -207,20 +230,39 @@ main {
   align-items: center;
   gap: 10px;
   font-family: "Roboto", "sans-serif";
+  flex-wrap: wrap;
 }
 
-.dorling-toolbar label {
-  color: var(--ink);
+.dorling-toolbar > span {
+  color: #f2f2f2;
   font-weight: 600;
 }
 
-.dorling-toolbar select {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 6px 10px;
-  background: #fff;
-  color: var(--ink);
-  font-family: "Roboto", "sans-serif";
+.dorling-toolbar .metric-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.dorling-metric-btn {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(90, 10, 10, 0.35);
+  color: #e4e4e4;
+  min-width: 96px;
+  padding: 6px 14px;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+}
+
+.dorling-metric-btn:hover {
+  border-color: rgba(255, 255, 255, 0.38);
+}
+
+.dorling-metric-btn.active {
+  background: linear-gradient(90deg, #d7352b 0%, #c62722 100%);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #fff;
 }
 
 .dorling-map {
@@ -231,8 +273,12 @@ main {
   overflow: hidden;
   min-height: 700px;
   background:
-    radial-gradient(circle at 75% 20%, #f8efe2 0%, transparent 48%),
-    linear-gradient(180deg, #fbf6ec 0%, #f4ebe0 100%);
+    radial-gradient(
+      circle at 75% 20%,
+      rgba(255, 255, 255, 0.03) 0%,
+      transparent 48%
+    ),
+    linear-gradient(180deg, #343434 0%, #2f2f2f 100%);
 }
 
 .dorling-map svg {
@@ -242,8 +288,8 @@ main {
 }
 
 .dorling-country {
-  fill: #ece5d8;
-  stroke: #d8cdbd;
+  fill: #3a3a3a;
+  stroke: rgba(255, 255, 255, 0.08);
   stroke-width: 0.6;
 }
 
@@ -295,14 +341,21 @@ main {
 }
 
 #heatmap-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
 }
-.cell { stroke: #1a1a1a; stroke-width: 2px; }
-.cell:hover { stroke: white; stroke-width: 3px; cursor: pointer; }
+.cell {
+  stroke: #1a1a1a;
+  stroke-width: 2px;
+}
+.cell:hover {
+  stroke: white;
+  stroke-width: 3px;
+  cursor: pointer;
+}
 
 @media screen and (max-width: 900px) {
   .site-header {

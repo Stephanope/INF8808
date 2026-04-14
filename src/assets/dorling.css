@@ -1,0 +1,152 @@
+:root {
+  --bg-main: #313131;
+  --bg-panel: #1f1f1f;
+  --bg-panel-2: #171717;
+  --text-main: #f5efe7;
+  --text-muted: #d2c6b8;
+  --line-soft: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.18);
+  --accent-red: #d7352b;
+  --accent-red-dark: #6f0d0d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.dorling-page {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text-main);
+  font-family: "Roboto", sans-serif;
+  background:
+    radial-gradient(
+      circle at 75% 20%,
+      rgba(255, 255, 255, 0.03) 0%,
+      transparent 48%
+    ),
+    linear-gradient(180deg, #343434 0%, #2f2f2f 100%);
+}
+
+.dorling-shell {
+  width: min(1400px, calc(100% - 24px));
+  margin: 0 auto;
+  padding: 6px 0 8px;
+}
+
+.chart-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: var(--text-main);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.chart-toolbar span {
+  font-weight: 600;
+}
+
+.metric-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dorling-metric-btn {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(90, 10, 10, 0.35);
+  color: #e4e4e4;
+  min-width: 96px;
+  padding: 6px 14px;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+}
+
+.dorling-metric-btn:hover {
+  border-color: rgba(255, 255, 255, 0.38);
+}
+
+.dorling-metric-btn.active {
+  background: linear-gradient(90deg, #d7352b 0%, #c62722 100%);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #fff;
+}
+
+.dorling-map {
+  position: relative;
+  min-height: 500px;
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 75% 20%,
+      rgba(255, 255, 255, 0.03) 0%,
+      transparent 48%
+    ),
+    linear-gradient(180deg, #343434 0%, #2f2f2f 100%);
+}
+
+.dorling-map svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dorling-country {
+  fill: #3a3a3a;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 0.6;
+}
+
+.dorling-bubble {
+  fill-opacity: 0.86;
+  stroke: rgba(255, 255, 255, 0.75);
+  stroke-width: 1;
+}
+
+.dorling-bubble:hover {
+  stroke: #ffffff;
+  stroke-width: 1.5;
+}
+
+.dorling-tooltip {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease;
+  background: rgba(19, 15, 12, 0.92);
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.35;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.24);
+}
+
+.dorling-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  .dorling-shell {
+    width: min(100%, calc(100% - 16px));
+    padding-top: 8px;
+  }
+
+  .dorling-map {
+    min-height: 500px;
+  }
+}

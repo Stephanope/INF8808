@@ -6,14 +6,14 @@ export const METRICS = {
     label: 'Note',
     buttonLabel: 'Note',
     legendTitle: 'Note',
-    colorStops: ['#ff2b2b', '#ffd800', '#5eff2d']
+    colorStops: ['#ffffff', '#ff6a6a', '#ff0000']
   },
   runtime: {
     key: 'runtime',
     label: 'Duree',
     buttonLabel: 'Duree',
     legendTitle: 'Duree (min)',
-    colorStops: ['#ff2b2b', '#ffd800', '#5eff2d'],
+    colorStops: ['#ffffff', '#ff6a6a', '#ff0000'],
     colorDomain: [0, 90, 180]
   }
 }

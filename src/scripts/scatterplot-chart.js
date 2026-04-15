@@ -15,7 +15,7 @@ export function createScatterplot (selector, movies, onMovieFocus) {
   const clipId = 'scatterplot-plot-clip'
   const zoomStep = 1.25
   const minZoom = 1
-  const maxZoom = 8
+  const maxZoom = 30
 
   let zoomLevel = 1
   let panX = 0
@@ -443,7 +443,7 @@ export function createScatterplot (selector, movies, onMovieFocus) {
       .attr('y1', yScale(0))
       .attr('x2', xScale(thresholdEnd))
       .attr('y2', yScale(thresholdEnd))
-      .attr('stroke', '#ff2b42')
+      .attr('stroke', '#2ecc71')
       .attr('stroke-width', 1.6)
       .attr('stroke-dasharray', '6,5')
 
@@ -453,7 +453,7 @@ export function createScatterplot (selector, movies, onMovieFocus) {
       .attr('y', yScale(thresholdEnd) - 8)
       .attr('text-anchor', 'end')
       .style('font-size', '11px')
-      .attr('fill', '#ff5a67')
+      .attr('fill', '#2ecc71')
       .text('Seuil de rentabilite')
 
     const colorScale = buildColorScale(movies, metric.key, metric.colorStops)

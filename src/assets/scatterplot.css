@@ -1,13 +1,13 @@
 :root {
-  --bg-main: #06080d;
-  --bg-panel: #10060a;
-  --bg-panel-2: #18090d;
+  --bg-main: #323131;
+  --bg-panel: #323131;
+  --bg-panel-2: #323131;
   --text-main: #f6f6f6;
   --text-muted: #bcbcc0;
   --line-soft: rgba(255, 255, 255, 0.12);
   --line-strong: rgba(255, 255, 255, 0.2);
-  --accent-blue: #1ba7ff;
-  --accent-red: #ff334f;
+  --accent-blue: #323131;
+  --accent-red: #323131;
 }
 
 * {
@@ -16,33 +16,35 @@
 
 body.scatterplot-page {
   margin: 0;
-  min-height: 80vh;
+  min-height: 100vh;
   color: var(--text-main);
   font-family: 'Roboto', sans-serif;
-  background:
-    radial-gradient(circle at 15% 20%, rgba(48, 130, 255, 0.18), transparent 36%),
-    radial-gradient(circle at 85% 0%, rgba(255, 39, 39, 0.15), transparent 34%),
-    linear-gradient(140deg, #05070b 0%, #0a0d13 45%, #0e090f 100%);
+  background: #323131;
 }
 
 .dashboard-shell {
-  width: calc(90vw - 20px);
+  width: 1280px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 10px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 420px;
+  grid-template-columns: minmax(0, 1fr) 460px;
   gap: 0;
-  min-height: 650px;
+  height: 850px;
+  min-height: 850px;
+  max-height: 850px;
 }
 
 .chart-panel {
-  border: 2px solid var(--accent-blue);
+  border: 2px solid #000;
   border-right: 0;
-  background: linear-gradient(155deg, rgba(6, 9, 14, 0.95), rgba(12, 15, 24, 0.9));
+  background: #252525;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 0;
 }
 
 .chart-panel::before {
@@ -108,7 +110,7 @@ body.scatterplot-page {
 .metric-btn {
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 999px;
-  background: rgba(90, 10, 10, 0.35);
+  background: rgba(80, 80, 80, 0.35);
   color: #e4e4e4;
   min-width: 96px;
   padding: 6px 14px;
@@ -122,7 +124,7 @@ body.scatterplot-page {
 }
 
 .metric-btn.active {
-  background: linear-gradient(90deg, #5f3a36, #6f3133);
+  background: linear-gradient(90deg, #4a4a4a, #5b5b5b);
   border-color: rgba(255, 255, 255, 0.45);
   color: #fff;
 }
@@ -143,12 +145,14 @@ body.scatterplot-page {
 }
 
 .side-panel {
-  border: 2px solid #a80000;
-  background: radial-gradient(circle at 20% 0%, #2a0910 0%, var(--bg-panel) 54%, #070609 100%);
+  border: 2px solid #000;
+  background: #252525;
   padding: 6px 14px 14px;
   display: flex;
   flex-direction: column;
-  height: 850px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .movie-title {
@@ -160,6 +164,12 @@ body.scatterplot-page {
   text-transform: uppercase;
   font-style: italic;
   color: #fff;
+  min-height: 72px;
+  max-height: 72px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .poster-wrap {
@@ -227,11 +237,16 @@ body.scatterplot-page {
 
 @media (max-width: 1100px) {
   .dashboard-shell {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    min-height: 0;
+    max-height: none;
     grid-template-columns: 1fr;
   }
 
   .chart-panel {
-    border-right: 2px solid var(--accent-blue);
+    border-right: 2px solid #000;
   }
 
   .side-panel {
@@ -247,3 +262,4 @@ body.scatterplot-page {
     font-size: 20px;
   }
 }
+

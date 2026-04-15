@@ -1,7 +1,7 @@
 /* eslint-disable quote-props */
 // Color constants - Accessible for colorblind users
 export const COLORS = {
-  PRIMARY_BG: '#5a5a6a',
+  PRIMARY_BG: '#323131',
   SECONDARY_BG: '#4a4a5a',
   CHART_BG: '#5a5a6a',
   TEXT_PRIMARY: '#ffffff',

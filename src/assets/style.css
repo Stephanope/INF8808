@@ -154,6 +154,7 @@ main {
   padding: clamp(18px, 3vw, 30px);
   box-shadow: 0 6px 18px rgba(28, 18, 10, 0.06);
   scroll-margin-top: 24px;
+  height: fit-content;
 }
 
 .part-index {
@@ -174,7 +175,7 @@ main {
 .story-part p {
   margin: 0;
   color: var(--ink-muted);
-  line-height: 1.7;
+
 }
 
 .dorling-fact {
@@ -199,11 +200,10 @@ main {
 .linechart-embed {
   margin-top: 14px;
   width: 100%;
-  height: 600px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: #120f0d;
-  transition: height 0.3s ease;
+  height: fit-content;
 }
 
 .dorling-embed {

@@ -126,7 +126,7 @@ export function createCountryLineCharts (selector, data) {
     .style('position', 'absolute')
     .style('top', '0')
     .style('right', '0')
-    .style('background-color', COLORS.SECONDARY_BG)
+    .style('background-color', COLORS.PRIMARY_BG)
     .style('border', `1px solid ${COLORS.BORDER}`)
     .style('border-radius', '4px')
     .style('padding', '10px')
@@ -213,6 +213,12 @@ function drawCountryLineChart (container, countryData, countries, metric, colorS
     .attr('viewBox', `0 0 ${width} ${height}`)
     .attr('preserveAspectRatio', 'xMinYMin meet')
     .attr('class', 'line-chart-svg')
+
+  // Add background
+  svg.append('rect')
+    .attr('width', width)
+    .attr('height', height)
+    .attr('fill', '#323131')
 
   const g = svg.append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`)
@@ -371,6 +377,12 @@ function drawLineChart (container, data, chart, margin, width, height) {
     .attr('viewBox', `0 0 ${width} ${height}`)
     .attr('preserveAspectRatio', 'xMinYMin meet')
     .attr('class', 'line-chart-svg')
+
+  // Add background
+  svg.append('rect')
+    .attr('width', width)
+    .attr('height', height)
+    .attr('fill', '#323131')
 
   const g = svg.append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`)

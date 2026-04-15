@@ -1,6 +1,31 @@
 import * as d3 from 'd3'
 
+const GENRE_FR = {
+    "Action": "Action", 
+    "Adventure": "Aventure", 
+    "Animation": "Animation", 
+    "Comedy": "Comédie", 
+    "Documentary": "Documentaire", 
+    "Drama": "Drame", 
+    "Family": "Famille", 
+    "Fantasy": "Fantastique", 
+    "History": "Histoire", 
+    "Horror": "Horreur", 
+    "Music": "Musique", 
+    "Mystery": "Mystère", 
+    "Romance": "Romance", 
+    "Science Fiction": "Science-fiction",
+    "TV Movie": "Téléfilm", 
+    "Thriller": "Thriller", 
+    "War": "Guerre", 
+    "Western": "Western"
+}
+
 const MARGIN = {top: 30, right: 30, bottom: 100, left: 80}
+
+function translateGenre(genre) {
+    return GENRE_FR[genre] || genre
+}
 
 function parseGenres (genreStr) {
     if (!genreStr) return []
@@ -30,8 +55,9 @@ function groupByGenre (data, metric, yearRange) {
         const val = metric === 'revenue' ? d.revenue : d.vote_average
         if (!val || val <= 0) return 
         parseGenres(d.genres).forEach(genre => {
-            if (!genreMap.has(genre)) genreMap.set(genre, [])
-            genreMap.get(genre).push(val)
+            const genreFR = translateGenre(genre)
+            if (!genreMap.has(genreFR)) genreMap.set(genreFR, [])
+            genreMap.get(genreFR).push(val)
         })
     })
 

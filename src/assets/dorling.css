@@ -140,6 +140,107 @@ body.dorling-page {
   transform: translateY(0);
 }
 
+.dorling-country-panel {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  width: min(200px, calc(100% - 28px));
+  max-height: 75%;
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 12px;
+  padding: 10px;
+  background: rgba(19, 16, 14, 0.92);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+}
+
+.dorling-country-name {
+  margin: 0 0 10px;
+  font-size: 16px;
+  line-height: 1.1;
+  color: #f8f1e9;
+  font-family: "Roboto Slab", serif;
+}
+
+.dorling-country-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.dorling-country-stat-card {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px;
+}
+
+.dorling-country-stat-card .label {
+  display: block;
+  font-size: 9px;
+  line-height: 1.2;
+  color: #d8cab9;
+}
+
+.dorling-country-stat-card .value {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.dorling-country-top-title {
+  margin: 0 0 8px;
+  font-size: 11px;
+  color: #f1e8dc;
+}
+
+.dorling-country-top-list {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+}
+
+.dorling-film-item {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+}
+
+.dorling-film-poster {
+  width: 34px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dorling-film-details {
+  min-width: 0;
+}
+
+.dorling-film-title {
+  display: block;
+  color: #fff;
+  font-size: 10px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.dorling-film-meta {
+  display: block;
+  margin-top: 2px;
+  font-size: 8px;
+  line-height: 1.35;
+  color: #d6cabc;
+}
+
 @media (max-width: 900px) {
   .dorling-shell {
     width: min(100%, calc(100% - 16px));
@@ -148,5 +249,14 @@ body.dorling-page {
 
   .dorling-map {
     min-height: 500px;
+  }
+
+  .dorling-country-panel {
+    width: min(200px, calc(100% - 24px));
+    max-height: 75%;
+  }
+
+  .dorling-country-stats {
+    grid-template-columns: 1fr;
   }
 }

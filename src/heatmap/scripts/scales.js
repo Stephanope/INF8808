@@ -9,5 +9,5 @@ export function getScale(min, max) {
             ((max - min) * 0.75) + min,
             max
         ])
-        .range(["#1a0000", "#5c0000", "#e60000", "#ff9999", "#ffffff"]);
+        .range(["#ffffff","#ff9999","#e60000","#5c0000","#1a0000"]);
 }

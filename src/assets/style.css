@@ -175,7 +175,22 @@ main {
 .story-part p {
   margin: 0;
   color: var(--ink-muted);
+}
 
+.chart-summary {
+  margin-top: 4px;
+  line-height: 1.65;
+}
+
+.chart-fact {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--brand-accent);
+  background: rgba(229, 9, 20, 0.08);
+  color: #f2efea;
+  font-family: "Roboto", "sans-serif";
+  font-size: 14px;
+  line-height: 1.55;
 }
 
 .dorling-fact {

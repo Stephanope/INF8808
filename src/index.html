@@ -28,29 +28,39 @@
       <nav class="top-nav" aria-label="Navigation principale">
         <a href="#part-1">Scatterplot</a>
         <a href="#part-2">Multi-line Chart</a>
-        <a href="#part-3">Dataviz 3</a>
+        <a href="#part-3">Heat map</a>
         <a href="#part-4">Dorling map</a>
-        <a href="#part-5">Dataviz 5</a>
+        <a href="#part-5">Boxplot</a>
       </nav>
     </header>
     <main>
       <section class="landing-hero" id="intro">
         <p class="hero-kicker">INF8808 - Projet Cinema</p>
-        <h1 class="hero-title">Explorer les films par les donnees</h1>
+        <h1 class="hero-title">Le cinéma raconté par les données</h1>
         <p class="hero-description">
-          Cette plateforme presente nos visualisations interactives pour
-          comprendre les tendances du cinema: notes, revenus, budgets et plus
-          encore... yapyap
+          Ce site rassemble plusieurs visualisations interactives pour explorer
+          les films sous différents angles: répartition géographique, évolution
+          temporelle, tendances saisonnières, relation budget-revenu et
+          distribution par genre.
         </p>
         <a class="hero-cta" href="#part-1">Commencer</a>
       </section>
 
       <section class="story-part" id="part-1">
-        <p class="part-index"">Partie 1</p>
-        <h2>Movie Scatterplot</h2>
+        <p class="part-index">Partie 1</p>
+        <h2>Budget vs revenus des films</h2>
         <p>
-          Nuage de points interactif budget vs revenus, avec panneau de details.
+          Ce nuage de points compare le budget et les revenus de chaque film
+          afin de repérer les productions les plus rentables et les cas
+          atypiques.
         </p>
+        <br />
+        <p class="chart-fact">
+          Fait amusant : un budget élevé ne garantit pas un grand succès au box-
+          office, et certains films très rentables partent de budgets bien plus
+          modestes.
+        </p>
+        <br />
         <iframe
           class="scatterplot-embed"
           src="scatterplot.html"
@@ -61,15 +71,20 @@
       <section class="story-part" id="part-2">
         <p class="part-index">Partie 2</p>
         <h2>
-          Évolution du nombre de films, du budget moyen et des revenus moyens
-          par année
+          Évolution des indicateurs cinématographiques par période de 5 ans
         </h2>
         <p>
-          Les graphiques ci-dessous montrent l'évolution de trois indicateurs
-          clés des productions cinématographiques mondiales, regroupés par
-          périodes de 5 ans. Chaque point représente la moyenne des 5 années
-          précédentes (ex: 1955 = moyenne 1951-1955).
+          Cette série de graphiques montre comment le volume de films, le budget
+          moyen et les revenus moyens évoluent dans le temps, en regroupant les
+          données par périodes de cinq ans.
         </p>
+        <br />
+        <p class="chart-fact">
+          Fait amusant : à partir des années 2000, les revenus moyens montent
+          plus vite que le nombre de films produits, signe que quelques titres
+          pèsent de plus en plus lourd.
+        </p>
+        <br />
         <iframe
           class="linechart-embed"
           src="linechart.html"
@@ -81,16 +96,23 @@
         <p class="part-index">Partie 3</p>
         <h2>Analyse saisonnière : Revenus, Notes et Volumes de production</h2>
         <p>
-          Les cartes de chaleur (heatmaps) ci-dessous permettent d'identifier les 
-          tendances mensuelles de l'industrie cinématographique. Elles comparent 
-          les revenus moyens (en millions de dollars), l'accueil critique 
-          (notes sur 10) et la le nombre de films sorties chaque mois de l'année.
+          Les cartes de chaleur (heatmaps) ci-dessous permettent d'identifier
+          les tendances mensuelles de l'industrie cinématographique. Elles
+          comparent les revenus moyens (en millions de dollars), l'accueil
+          critique (notes sur 10) et la le nombre de films sorties chaque mois
+          de l'année.
         </p>
+        <br />
+        <p class="chart-fact">
+          Fait amusant : les mois les plus rentables ne sont pas toujours ceux
+          qui sortent le plus de films, ce qui montre que le calendrier de
+          sortie compte autant que le volume.
+        </p>
+        <br />
         <iframe
           class="heatmap-embed"
           src="heatmap.html"
           title="Analyse Heatmap"
-          style="width: 100%; border: none"
         ></iframe>
       </section>
 
@@ -130,10 +152,19 @@
 
       <section class="story-part" id="part-5">
         <p class="part-index">Partie 5</p>
-        <h2>Distribution par genre</h2>
+        <h2>Distribution des revenus et des notes par genre</h2>
         <p>
-          Boîtes à moustaches des revenus et des notes selon le genre cinématographique.
+          Boîtes à moustaches qui comparent la dispersion des revenus et des
+          notes selon le genre cinématographique, afin de voir quels genres sont
+          les plus variables ou les plus stables.
         </p>
+        <br />
+        <p class="chart-fact">
+          Fait amusant : certains genres jouent la sécurité avec des revenus
+          assez stables, alors que d'autres alternent entre petits succès et
+          énormes cartons.
+        </p>
+        <br />
         <div class="bp-toolbar" id="boxplot-toolbar">
           <div class="bp-toggle-group">
             <span class="bp-toolbar-label">Filtrer par :</span>
@@ -150,12 +181,16 @@
                 class="bp-slider"
                 id="bp-slider-min"
                 type="range"
+                aria-label="Année minimale"
+                title="Année minimale"
                 step="1"
               />
               <input
                 class="bp-slider"
                 id="bp-slider-max"
                 type="range"
+                aria-label="Année maximale"
+                title="Année maximale"
                 step="1"
               />
             </div>

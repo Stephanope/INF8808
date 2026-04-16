@@ -207,11 +207,14 @@
     <script>
       // Listen for iframe height messages
       window.addEventListener("message", (event) => {
-        if (event.data.type === "iframe-height") {
-          const iframes = document.querySelectorAll("iframe");
-          iframes.forEach((iframe) => {
-            iframe.style.height = event.data.height + 20 + "px";
-          });
+        if (event.data?.type === "iframe-height") {
+          const sourceIframe = Array.from(document.querySelectorAll("iframe")).find(
+            (iframe) => iframe.contentWindow === event.source,
+          );
+
+          if (sourceIframe) {
+            sourceIframe.style.height = event.data.height + 20 + "px";
+          }
         }
       });
     </script>

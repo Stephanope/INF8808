@@ -212,6 +212,8 @@ function drawCountryLineChart (container, countryData, countries, metric, colorS
     .attr('height', height)
     .attr('viewBox', `0 0 ${width} ${height}`)
     .attr('preserveAspectRatio', 'xMinYMin meet')
+    .attr('aria-hidden', 'true')
+    .attr('focusable', 'false')
     .attr('class', 'line-chart-svg')
 
   // Add background
@@ -376,6 +378,8 @@ function drawLineChart (container, data, chart, margin, width, height) {
     .attr('height', height)
     .attr('viewBox', `0 0 ${width} ${height}`)
     .attr('preserveAspectRatio', 'xMinYMin meet')
+    .attr('aria-hidden', 'true')
+    .attr('focusable', 'false')
     .attr('class', 'line-chart-svg')
 
   // Add background

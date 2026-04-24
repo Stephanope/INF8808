@@ -11,7 +11,30 @@
 
   <body class="linechart-page">
     <main class="dashboard-shell">
-      <div id="linechart-container" class="linechart-container"></div>
+      <h1 id="linechart-alt-title" class="sr-only">Analyse line chart du cinéma mondial (1955-2025)</h1>
+      <div id="linechart-alt-desc" class="sr-only">
+        Description générale :
+        Série de trois graphiques linéaires superposés analysant l'évolution du cinéma entre 1955 et 2025 pour cinq pays : États-Unis (bleu), Royaume-Uni (orange), France (vert), Inde (rouge) et Allemagne (violet). Les données sont regroupées par périodes de 5 ans.
+
+        1. Nombre de films :
+        La production mondiale est restée stable et faible jusqu'en 1980. À partir de là, les États-Unis connaissent une croissance exponentielle, atteignant un pic d'environ 1 000 films vers 2010, avant de chuter drastiquement sous les 300 films à l'approche de 2025. Les autres pays suivent une tendance similaire mais beaucoup plus modeste, avec des pics ne dépassant pas 200 films.
+
+        2. Budget moyen ($) :
+        Le graphique montre une hausse générale et constante des coûts de production. Les États-Unis mènent la danse, passant d'un budget quasi nul en 1955 à plus de 50 millions de dollars en 2025. L'Allemagne et le Royaume-Uni montrent une forte progression à partir de l'an 2000, se stabilisant entre 25 et 35 millions. L'Inde et la France ferment la marche avec des budgets moyens plus bas (sous les 15 millions).
+
+        3. Revenus moyens ($) :
+        Les revenus suivent une courbe très proche de celle des budgets, mais avec des montants plus élevés. Les États-Unis dominent largement avec des revenus grimpant jusqu'à 130 millions de dollars par film après 2010. Le Royaume-Uni se distingue également avec une belle performance (environ 80 millions). Pour les autres pays, les revenus restent relativement stables ou en légère progression, oscillant entre 10 et 40 millions.
+
+        Observation clé :
+        À partir des années 2000, les revenus augmentent plus vite que le nombre de films produits, indiquant que l'industrie se concentre désormais sur quelques titres "poids lourds" (blockbusters) très rentables.
+      </div>
+      <div
+        id="linechart-container"
+        class="linechart-container"
+        role="img"
+        aria-labelledby="linechart-alt-title"
+        aria-describedby="linechart-alt-desc"
+      ></div>
       <div class="linechart-tooltip" id="linechart-tooltip"></div>
     </main>
 

@@ -2,6 +2,47 @@ import * as d3 from 'd3'
 import { formatMoney } from './scatterplot-data.js'
 
 const imageBase = 'https://image.tmdb.org/t/p/w500'
+const GENRE_TRANSLATIONS = {
+  Action: 'Action',
+  Adventure: 'Aventure',
+  Animation: 'Animation',
+  Comedy: 'Comedie',
+  Crime: 'Crime',
+  Documentary: 'Documentaire',
+  Drama: 'Drame',
+  Family: 'Famille',
+  Fantasy: 'Fantastique',
+  History: 'Historique',
+  Horror: 'Horreur',
+  Music: 'Musique',
+  Mystery: 'Mystere',
+  Romance: 'Romance',
+  'Science Fiction': 'Science-fiction',
+  'TV Movie': 'Telefilm',
+  Thriller: 'Thriller',
+  War: 'Guerre',
+  Western: 'Western'
+}
+
+/**
+ * Translates a comma-separated genre list from English to French.
+ * Unknown genres are kept as-is.
+ *
+ * @param {string} genres The raw genre list.
+ * @returns {string} The translated genre list.
+ */
+function translateGenres (genres) {
+  if (!genres || typeof genres !== 'string') {
+    return 'N/A'
+  }
+
+  return genres
+    .split(',')
+    .map(genre => genre.trim())
+    .filter(Boolean)
+    .map(genre => GENRE_TRANSLATIONS[genre] || genre)
+    .join(', ')
+}
 
 /**
  * Initializes the movie detail panel.
@@ -43,5 +84,5 @@ export function updateMoviePanel (panel, movie) {
   panel.revenue.text(formatMoney(movie.revenue))
   panel.rating.text(movie.vote_average.toFixed(3))
   panel.runtime.text(Math.round(movie.runtime))
-  panel.genres.text(movie.genres || 'N/A')
+  panel.genres.text(translateGenres(movie.genres))
 }

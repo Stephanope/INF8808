@@ -14,6 +14,18 @@
   box-sizing: border-box;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: pre-wrap;
+  border: 0;
+}
+
 body.scatterplot-page {
   margin: 0;
   min-height: 100vh;
@@ -72,7 +84,7 @@ body.scatterplot-page {
   height: 38px;
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 10px;
-  background: rgba(8, 12, 18, 0.88);
+  background: rgba(90, 10, 10, 0.35);
   color: #f4f4f4;
   font-size: 24px;
   line-height: 1;
@@ -83,7 +95,7 @@ body.scatterplot-page {
 
 .zoom-btn:hover {
   border-color: rgba(255, 255, 255, 0.42);
-  background: rgba(18, 24, 34, 0.92);
+  background: linear-gradient(90deg, #d7352b 0%, #c62722 100%);
 }
 
 .zoom-btn:active {
@@ -110,7 +122,7 @@ body.scatterplot-page {
 .metric-btn {
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 999px;
-  background: rgba(80, 80, 80, 0.35);
+  background: rgba(90, 10, 10, 0.35);
   color: #e4e4e4;
   min-width: 96px;
   padding: 6px 14px;
@@ -124,7 +136,7 @@ body.scatterplot-page {
 }
 
 .metric-btn.active {
-  background: linear-gradient(90deg, #4a4a4a, #5b5b5b);
+  background: linear-gradient(90deg, #d7352b 0%, #c62722 100%);
   border-color: rgba(255, 255, 255, 0.45);
   color: #fff;
 }
@@ -169,22 +181,24 @@ body.scatterplot-page {
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
 .poster-wrap {
-  width: 100%;
-  aspect-ratio: 2 / 3;
+  width: min(86%, 360px);
+  aspect-ratio: 27 / 40;
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: linear-gradient(160deg, #161015, #090a0d);
   overflow: hidden;
-  margin-bottom: 12px;
+  margin: 0 auto 12px;
 }
 
 .poster-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
@@ -212,6 +226,20 @@ body.scatterplot-page {
   font-size: 24px;
   line-height: 1.18;
   font-family: 'Roboto Slab', serif;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 8px;
+  align-items: start;
+  min-height: 56px;
+}
+
+#meta-genres {
+  color: #ffffff;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 .chart-tooltip {

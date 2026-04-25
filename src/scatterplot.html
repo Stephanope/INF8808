@@ -12,6 +12,39 @@
   <body class="scatterplot-page">
     <main class="dashboard-shell">
       <section class="chart-panel">
+        <h1 id="scatterplot-alt-title" class="sr-only">Analyse du scatter plot des films : budget, revenus et rentabilite</h1>
+        <div id="scatterplot-alt-desc-vote" class="sr-only">
+          Description (couleur = note) :
+          Nuage de points representant les films selon leur budget (axe horizontal, en dollars) et leurs revenus (axe vertical, en dollars). Chaque point correspond a un film. Les points situes au-dessus de la diagonale verte "Seuil de rentabilite" representent des films dont les revenus depassent le budget; en dessous, les films sont moins rentables.
+
+          1. Relation budget-revenus :
+          La tendance globale est croissante : plus le budget augmente, plus les revenus ont tendance a augmenter. La concentration principale se situe dans les budgets modestes a intermediaires, avec quelques films tres couteux qui forment des valeurs extremes vers la droite du graphique.
+
+          2. Distribution de la rentabilite :
+          Une proportion importante de films se trouve au-dessus de la diagonale, ce qui indique des revenus superieurs au budget. On observe aussi un groupe non negligeable de points sous la ligne, correspondant a des films qui recuperent difficilement leurs couts.
+
+          3. Encodage couleur par note :
+          Les points vont du clair vers le rouge selon la note moyenne. Les points les plus rouges indiquent des films mieux notes, tandis que les points plus clairs correspondent a des notes plus faibles. Le zoom (+/-) et le deplacement permettent d'explorer les zones denses. Au survol d'un point, le titre du film apparait et le panneau de droite affiche les details (affiche, budget, revenus, note, duree et genres).
+
+          Observation cle :
+          Les films a tres gros revenus ne sont pas systematiquement les mieux notes; la couleur montre une dispersion des notes sur l'ensemble des niveaux de budget et de revenus.
+        </div>
+        <div id="scatterplot-alt-desc-runtime" class="sr-only">
+          Description (couleur = duree) :
+          Nuage de points representant les films selon leur budget (axe horizontal, en dollars) et leurs revenus (axe vertical, en dollars). Chaque point correspond a un film. Les points situes au-dessus de la diagonale verte "Seuil de rentabilite" representent des films dont les revenus depassent le budget; en dessous, les films sont moins rentables.
+
+          1. Relation budget-revenus :
+          La tendance globale est croissante : plus le budget augmente, plus les revenus ont tendance a augmenter. La concentration principale se situe dans les budgets modestes a intermediaires, avec quelques films tres couteux qui forment des valeurs extremes vers la droite du graphique.
+
+          2. Distribution de la rentabilite :
+          Une proportion importante de films se trouve au-dessus de la diagonale, ce qui indique des revenus superieurs au budget. On observe aussi un groupe non negligeable de points sous la ligne, correspondant a des films qui recuperent difficilement leurs couts.
+
+          3. Encodage couleur par duree :
+          Les points vont du clair vers le rouge selon la duree (en minutes). Les points les plus rouges correspondent aux films les plus longs (jusqu'a 180+), les plus clairs aux films plus courts. Le zoom (+/-) et le deplacement permettent d'explorer les zones denses. Au survol d'un point, le titre du film apparait et le panneau de droite affiche les details (affiche, budget, revenus, note, duree et genres).
+
+          Observation cle :
+          Les films les plus longs ne se concentrent pas dans une seule zone: on en trouve a differents niveaux de budget et de revenus, meme si plusieurs productions tres rentables ont des durees elevees.
+        </div>
         <div class="zoom-controls" aria-label="Contrôles de zoom">
           <button class="zoom-btn" id="zoom-out-btn" type="button" aria-label="Dézoomer">−</button>
           <button class="zoom-btn" id="zoom-in-btn" type="button" aria-label="Zoomer">+</button>
@@ -24,7 +57,12 @@
           </div>
         </div>
 
-        <div id="scatterplot"></div>
+        <div
+          id="scatterplot"
+          role="img"
+          aria-labelledby="scatterplot-alt-title"
+          aria-describedby="scatterplot-alt-desc-vote"
+        ></div>
         <div class="chart-tooltip" id="chart-tooltip"></div>
       </section>
 

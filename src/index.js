@@ -54,4 +54,3 @@ if (dorlingButtons.length > 0) {
       }
     });
 }
-// TODO Other visualizations can be initialized here as needed.

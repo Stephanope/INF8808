@@ -37,11 +37,16 @@ import { initMoviePanel, updateMoviePanel } from './scatterplot-panel.js'
       })
 
       const buttons = d3.selectAll('.metric-btn')
+      const scatterplotContainer = d3.select('#scatterplot')
 
       const setMetric = metricKey => {
         activeMetric = METRICS[metricKey]
         buttons.classed('active', false)
         d3.select(`.metric-btn[data-metric='${metricKey}']`).classed('active', true)
+        scatterplotContainer.attr(
+          'aria-describedby',
+          metricKey === 'runtime' ? 'scatterplot-alt-desc-runtime' : 'scatterplot-alt-desc-vote'
+        )
         chart.resetZoom()
         chart.render(activeMetric)
       }

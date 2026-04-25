@@ -25,18 +25,23 @@
 .bp-toggle {
   padding: 6px 16px;
   border-radius: 999px;
-  border: 1.5px solid var(--brand-accent);
-  background: transparent;
-  color: var(--brand-accent);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(90, 10, 10, 0.35);
+  color: #e4e4e4;
   font-family: "Roboto", sans-serif;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.bp-toggle:hover {
+  border-color: rgba(255, 255, 255, 0.38);
 }
 
 .bp-toggle.active,
-.bp-toggle:hover {
-  background: var(--brand-accent);
+.bp-toggle:active {
+  background: linear-gradient(90deg, #d7352b 0%, #c62722 100%);
+  border-color: rgba(255, 255, 255, 0.45);
   color: #fff;
 }
 

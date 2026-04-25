@@ -32,7 +32,7 @@ function parseGenres (genreStr) {
     return genreStr.split(',').map(g => g.trim()).filter(Boolean)
 }
 
-function computerBoxStats (values) {
+function calculateStats (values) {
     const sorted = [...values].sort(d3.ascending)
     const q1 = d3.quantile(sorted, 0.25)
     const median = d3.quantile(sorted, 0.5)
@@ -63,7 +63,7 @@ function groupByGenre (data, metric, yearRange) {
 
     return Array.from(genreMap.entries())
         .filter(([, vals]) => vals.length >= 5)
-        .map(([genre, vals]) => ({genre, stats: computerBoxStats(vals) }))
+        .map(([genre, vals]) => ({genre, stats: calculateStats(vals) }))
         .sort((a, b) => d3.ascending(a.genre, b.genre))
 }
 
@@ -81,40 +81,48 @@ export function initBoxplot (data) {
     const labelMin = document.getElementById('bp-year-min')
     const labelMax = document.getElementById('bp-year-max')
 
-    ;[sliderMin, sliderMax].forEach(s => {
-        s.min = yearMin
-        s.max = yearMax
-        s.step = 1
-    })
+    for (const slider of [sliderMin, sliderMax]) {
+        slider.min = yearMin
+        slider.max = yearMax
+        slider.step = 1
+    }
     sliderMin.value = yearMin
     sliderMax.value = yearMax
     labelMin.textContent = yearMin 
     labelMax.textContent = yearMax
 
     function onSlider (movedSlider) {
-        let lo = +sliderMin.value 
-        let hi = +sliderMax.value 
-        if (movedSlider === 'min' && lo > hi) {
-            sliderMin.value = hi 
-            lo = hi
+        let lowerBound = +sliderMin.value 
+        let upperBound = +sliderMax.value 
+        if (movedSlider === 'min' && lowerBound > upperBound) {
+            sliderMin.value = upperBound 
+            lowerBound = upperBound
         }
-        if (movedSlider === 'max' && hi < lo) {
-            sliderMax.value = lo 
-            hi = lo
+        if (movedSlider === 'max' && upperBound < lowerBound) {
+            sliderMax.value = lowerBound 
+            upperBound = lowerBound
         }
-        yearRange = [lo, hi]
-        labelMin.textContent = lo 
-        labelMax.textContent = hi 
+        yearRange = [lowerBound, upperBound]
+        labelMin.textContent = lowerBound 
+        labelMax.textContent = upperBound 
         update()
     }
-    sliderMin.addEventListener('input', () => onSlider('min'))
-    sliderMax.addEventListener('input', () => onSlider('max'))
+    sliderMin.addEventListener('input', () => {
+        sliderMin.style.zIndex = 5 
+        sliderMax.style.zIndex = 4
+        onSlider('min')
+    })
+    sliderMax.addEventListener('input', () => {
+        sliderMax.style.zIndex = 5 
+        sliderMin.style.zIndex = 4
+        onSlider('max')
+    })
 
-    document.querySelectorAll('.bp-toggle').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.bp-toggle').forEach(b => b.classList.remove('active'))
-            btn.classList.add('active')
-            metric = btn.dataset.metric 
+    document.querySelectorAll('.bp-toggle').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.bp-toggle').forEach(otherButton => otherButton.classList.remove('active'))
+            button.classList.add('active')
+            metric = button.dataset.metric 
             update()
         })
     })
@@ -123,38 +131,45 @@ export function initBoxplot (data) {
     const tooltip = d3.select('#boxplot-tooltip')
 
     function getSize () {
-        const w = container.clientWidth || 900
-        const h = Math.max(420, w * 0.45)
+        const width = container.clientWidth || 900
+        const height = Math.max(420, width * 0.45)
         return {
-            width: w, 
-            height: h, 
-            innerW: w - MARGIN.left - MARGIN.right, 
-            innerH: h - MARGIN.top - MARGIN.bottom
+            width: width, 
+            height: height, 
+            innerWidth: width - MARGIN.left - MARGIN.right, 
+            innerHeight: height - MARGIN.top - MARGIN.bottom
         }
     }
 
     function update () {
-        const {width, height, innerW, innerH} = getSize() 
-        const grouped = groupByGenre(data, metric, yearRange)
+        const {width, height, innerWidth, innerHeight} = getSize() 
+        const genres = groupByGenre(data, metric, yearRange)
 
         svg.attr('width', width).attr('height', height)
         svg.selectAll('*').remove()
+        const metricLabel = metric === 'revenue' ? 'revenus en USD' : 'notes moyennes sur 10'
+        svg.attr('aria-label', 
+            `Boites a moustaches des ${metricLabel} par genre cinematographique, pour la periode ${yearRange[0]}-${yearRange[1]}` 
+        )
         
-        const g = svg.append('g')
+        const chartGroup = svg.append('g')
         .attr('transform', `translate(${MARGIN.left},${MARGIN.top})`)
 
         const xScale = d3.scaleBand() 
-            .domain(grouped.map(d => d.genre))
-            .range([0, innerW])
+            .domain(genres.map(d => d.genre))
+            .range([0, innerWidth])
             .padding(0.3)
 
-        const allVals = grouped.flatMap(d => [d.stats.min, d.stats.max])
+        const values = []
+        for (const d of genres) {
+            values.push(d.stats.min, d.stats.max)
+        }
         const yScale = metric === 'revenue'
-            ? d3.scaleLog().domain([Math.max(1, d3.min(allVals)), d3.max(allVals)]).range([innerH, 0]).nice()
-            : d3.scaleLinear().domain([0, 10]).range([innerH, 0])
+            ? d3.scaleLog().domain([Math.max(1, d3.min(values)), d3.max(values)]).range([innerHeight, 0]).nice()
+            : d3.scaleLinear().domain([0, 10]).range([innerHeight, 0])
 
-        g.append('g')
-            .attr('transform', `translate(0, ${innerH})`)
+        chartGroup.append('g')
+            .attr('transform', `translate(0, ${innerHeight})`)
             .call(d3.axisBottom(xScale))
             .selectAll('text')
             .attr('transform', 'rotate(-35)')
@@ -166,52 +181,52 @@ export function initBoxplot (data) {
             ? d3.axisLeft(yScale).ticks(6, '~s')
             : d3.axisLeft(yScale).ticks(10)
 
-        g.append('g')
+        chartGroup.append('g')
             .call(yAxis)
             .selectAll('text')
             .style('fill', '#FFFFFF')
 
-        g.append('text')
-            .attr('transform', `translate(${innerW / 2}, ${innerH + MARGIN.bottom - 8})`)
+        chartGroup.append('text')
+            .attr('transform', `translate(${innerWidth / 2}, ${innerHeight + MARGIN.bottom - 8})`)
             .attr('text-anchor', 'middle')
             .style('font-size', '13px')
             .style('fill', '#FFFFFF')
             .text('Genres')
 
-        g.append('text')
+        chartGroup.append('text')
             .attr('transform', 'rotate(-90)')
             .attr('y', -MARGIN.left + 14)
-            .attr('x', -innerH / 2)
+            .attr('x', -innerHeight / 2)
             .attr('text-anchor', 'middle')
             .style('font-size', '13px')
             .style('fill', '#FFFFFF')
             .text(metric === 'revenue' ? 'Revenus (USD)' : 'Note sur 10')
 
-        const boxW = xScale.bandwidth()
+        const boxWidth = xScale.bandwidth()
         const color = '#D9232E'
 
-        grouped.forEach(({genre, stats}) => {
-            const cx = xScale(genre) + boxW / 2
+        for (const {genre, stats} of genres) {
+            const centerX = xScale(genre) + boxWidth / 2
             
-            ;[stats.min, stats.max].forEach(val => {
+            for (const val of [stats.min, stats.max]) {
                 const fromY = val === stats.min ? yScale(stats.q1) : yScale(stats.q3)
-                g.append('line')
-                    .attr('x1', cx).attr('x2', cx)
+                chartGroup.append('line')
+                    .attr('x1', centerX).attr('x2', centerX)
                     .attr('y1', fromY).attr('y2', yScale(val))
                     .attr('stroke', '#FFFFFF')
                     .attr('stroke-width', 1.5)
 
-                g.append('line')
-                    .attr('x1', cx - boxW * 0.15).attr('x2', cx + boxW * 0.15)
+                chartGroup.append('line')
+                    .attr('x1', centerX - boxWidth * 0.15).attr('x2', centerX + boxWidth * 0.15)
                     .attr('y1', yScale(val)).attr('y2', yScale(val))
                     .attr('stroke', '#FFFFFF')
                     .attr('stroke-width', 1.5)
-            })
+            }
 
-            const boxEl = g.append('rect')
+            const box = chartGroup.append('rect')
                 .attr('x', xScale(genre))
                 .attr('y', yScale(stats.q3))
-                .attr('width', boxW)
+                .attr('width', boxWidth)
                 .attr('height', Math.abs(yScale(stats.q1) - yScale(stats.q3)))
                 .attr('fill', color)
                 .attr('fill-opacity', 1)
@@ -220,12 +235,12 @@ export function initBoxplot (data) {
                 .attr('rx', 3)
                 .style('cursor', 'pointer')
 
-            const medLine = g.append('line')
-                .attr('x1', xScale(genre)).attr('x2', xScale(genre) + boxW)
+            const medianLine = chartGroup.append('line')
+                .attr('x1', xScale(genre)).attr('x2', xScale(genre) + boxWidth)
                 .attr('y1', yScale(stats.median)).attr('y2', yScale(stats.median))
                 .attr('stroke', '#FFFFFF').attr('stroke-width', 2)
 
-            function fmt (v) {
+            function formatValue (v) {
                 return metric === 'revenue' ? `$${d3.format(',.0f')(v)}` : v.toFixed(2)
             }
 
@@ -235,11 +250,11 @@ export function initBoxplot (data) {
                 const y = event.clientY - rect.top 
                 tooltip.classed('visible', true).html(`
                     <strong>${genre}</strong><br/>
-                    Mediane : ${fmt(stats.median)}<br/>
-                    Q1 : ${fmt(stats.q1)}<br/>
-                    Q3 : ${fmt(stats.q3)}<br/>
-                    Min : ${fmt(stats.min)}<br/>
-                    Max : ${fmt(stats.max)}<br/>
+                    Mediane : ${formatValue(stats.median)}<br/>
+                    Q1 : ${formatValue(stats.q1)}<br/>
+                    Q3 : ${formatValue(stats.q3)}<br/>
+                    Min : ${formatValue(stats.min)}<br/>
+                    Max : ${formatValue(stats.max)}<br/>
                     Films : ${stats.count}
                 `)
                 
@@ -259,11 +274,11 @@ export function initBoxplot (data) {
                 tooltip.classed('visible', false)
             }
 
-            ;[boxEl, medLine].forEach(el => {
-                el.on('mouseover', showTip)
-                    .on('mouseout', hideTip)
-            })
-        })
+            for (const element of [box, medianLine]) {
+                element.on('mouseover', showTip)
+                .on('mouseout', hideTip)
+            }
+        }
     }
 
     update() 

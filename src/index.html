@@ -161,7 +161,8 @@
         <div
           id="dorling-map"
           class="dorling-map"
-          aria-label="Dorling map"
+          role="img"
+          aria-label="Carte de Dorling interactive représentant la répartition géographique de la production cinématographique mondiale. Chaque bulle est positionnée sur le pays de production correspondant. La taille d'une bulle est proportionnelle au nombre de films produits ; la couleur encode soit les revenus moyens par film, soit la note moyenne, selon le mode sélectionné. En mode Revenus, la couleur va du blanc (faibles revenus) au rouge foncé (jusqu'à environ 200 millions de dollars par film). En mode Notes, elle va du blanc (environ 5 sur 10) au rouge foncé (jusqu'à 10 sur 10). Points clés à retenir : premièrement, la production cinématographique mondiale est très inégalement répartie — les États-Unis écrasent tous les autres pays avec 6 760 films produits, soit une bulle bien plus grande que tous les autres pays réunis. Deuxièmement, l'Europe forme un cluster dense mais nettement plus modeste, dominé par le Royaume-Uni, l'Allemagne, la France et l'Espagne. Troisièmement, malgré leur volume de production, les États-Unis n'affichent qu'une note moyenne de 6,47 sur 10, ce qui suggère que quantité et qualité perçue ne vont pas toujours de pair. Quatrièmement, en mode Revenus, la plupart des pays hors États-Unis apparaissent blancs ou très pâles, révélant que les revenus élevés restent l'exception et non la règle à l'échelle mondiale. Cinquièmement, l'hémisphère sud (Amérique du Sud, Afrique, Océanie) est quasi absent de la carte, soulignant la concentration de l'industrie dans l'hémisphère nord. Un clic sur une bulle affiche les statistiques détaillées du pays et ses cinq films les plus rentables."
         ></div>
       </section>
 
@@ -169,9 +170,12 @@
         <p class="part-index">Partie 5</p>
         <h2>Distribution des revenus et des notes par genre</h2>
         <p>
-          Boîtes à moustaches qui comparent la dispersion des revenus et des
-          notes selon le genre cinématographique, afin de voir quels genres sont
-          les plus variables ou les plus stables.
+          Cette visualisation présente des boîtes à moustaches pour chaque genre cinématographique. 
+          Chaque boîte indique la médiane, les premier et troisieme quartiles, ainsi que les
+          valeurs minimales et maximales. Les genres sont classés par ordre alphabétique sur l'axe
+          des abscisses. L'axe des ordonées représente soit les revenus en dollars américains sur une échelle logarithmique, 
+          soit les notes moyennes des spectateurs sur 10. Le survol d'une boîte affiche les statistiques 
+          détaillées du genre concerné. 
         </p>
         <br />
         <p class="chart-fact">
@@ -213,7 +217,15 @@
           </div>
         </div>
         <div class="boxplot-wrap" id="boxplot-container">
-          <svg id="boxplot-svg"></svg>
+          <svg id="boxplot-svg" role="img" aria-labelledby="boxplot-title" aria-describedby="boxplot-desc">
+            <title id="boxplot-title">Distribution des revenus et des notes par genre cinématographique</title>
+            <desc id="boxplot-desc">
+              Boîtes à moustaches qui comparent la dispersion des revenus (en USD) ou des notes moyennes
+              sur 10 selon le genre cinématographique. Chaque boîte représente la médiane, les quartiles Q1 et Q3, 
+              ainsi que les valeurs extrêmes pour un genre donné. Un filtre nous permet de restreindre l'analyse 
+              à une periode spécifique entre 1911 et 2024.
+            </desc>
+          </svg>
           <div class="bp-tooltip" id="boxplot-tooltip"></div>
         </div>
       </section>

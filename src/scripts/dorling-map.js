@@ -587,7 +587,8 @@ function drawDorlingMap(
     .data([null])
     .join("svg")
     .attr("viewBox", `0 0 ${width} ${height}`)
-    .attr("aria-label", "Carte de Dorling des pays de production");
+    .attr("aria-hidden", "true")
+    .attr("focusable", "false");
 
   svg
     .selectAll(".dorling-background")
